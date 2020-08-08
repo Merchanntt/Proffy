@@ -3,15 +3,15 @@ import express from 'express';
 import CreateClassesControler from './controllers/CreateClassesController';
 import CreateConnectionsController from './controllers/CreateConnectionsController';
 
-const routes = express();
+const route = express.Router();
 
 const createClassesControler = new CreateClassesControler();
 const createConnectionsController = new CreateConnectionsController();
 
-routes.get('classes', createClassesControler.index);
-routes.post('classes', createClassesControler.create);
+route.get('/classes', createClassesControler.index);
+route.post('/classes', createClassesControler.create);
 
-routes.get('connections', createConnectionsController.index);
-routes.post('connections', createConnectionsController.create);
+route.get('/connections', createConnectionsController.index);
+route.post('/connections', createConnectionsController.create);
 
-export default routes;
+export default route;

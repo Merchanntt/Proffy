@@ -24,6 +24,7 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "camelcase": "off",
         "no-unused-vars": "off",
         "react/jsx-props-no-spreading": "off",
         "jsx-a11y/label-has-associated-control": "off",

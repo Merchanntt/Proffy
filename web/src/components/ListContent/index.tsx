@@ -1,38 +1,60 @@
-import React from 'react';
-
-import WhatsAppIcon from '../../assets/images/icons/whatsapp.svg';
+import React, { useCallback } from 'react';
+import { AiOutlineWhatsApp } from 'react-icons/ai';
+import api from '../../services/api';
 
 import './styles.css';
 
-const ListContent: React.FC = () => (
-  <article className="teacher-item">
-    <header>
-      <img src="https://avatars1.githubusercontent.com/u/62671334?s=460&u=91206c73c0af9f7d8e39295255531539351f5ff3&v=4" alt="Avatar" />
-      <div>
-        <strong>Adolfo Cornelius</strong>
-        <span>Física</span>
-      </div>
-    </header>
+export interface Teacher {
+  id: number;
+    name: string;
+    avatar: string;
+    whatsapp: string;
+    bio: string;
+    cost: number;
+    subject: string;
+}
 
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-      <br />
-      {' '}
-      <br />
-      Soluta facere iure, illo, aliquam cum, nihil odio totam provident saepe quos inventore obcaecati error non. Ratione rem porro eveniet illum. Possimus!
-    </p>
+interface ListContentProps {
+  classes: Teacher
+}
 
-    <footer>
+const ListContent: React.FC<ListContentProps> = ({ classes }) => {
+  const handleNewConnection = useCallback(() => {
+    api.post('connections', {
+      user_id: classes.id,
+    });
+  }, [classes.id]);
+
+  return (
+    <article className="teacher-item">
+      <header>
+        <img src={classes.avatar} alt="Avatar" />
+        <div>
+          <strong>{classes.name}</strong>
+          <span>{classes.subject}</span>
+        </div>
+      </header>
+
       <p>
-        Preço/Hora
-        <strong>R$ 80,00</strong>
+        {classes.bio}
       </p>
-      <button type="button">
-        <img src={WhatsAppIcon} alt="whatsapp" />
-        Entrar em contato
-      </button>
-    </footer>
-  </article>
-);
+
+      <footer>
+        <p>
+          Preço/Hora
+          <strong>
+            R$
+            {' '}
+            {classes.cost}
+          </strong>
+        </p>
+        <a target="_blank" onClick={handleNewConnection} href={`https://wa.me/${classes.whatsapp}`}>
+          <AiOutlineWhatsApp size={20} />
+          Entrar em contato
+        </a>
+      </footer>
+    </article>
+  );
+};
 
 export default ListContent;
