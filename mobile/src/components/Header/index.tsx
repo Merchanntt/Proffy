@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, ReactNode } from 'react'
 import { View, Image, Text } from 'react-native'
 import { BorderlessButton } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
@@ -10,9 +10,10 @@ import styles from './styles'
 
 interface HeaderProps {
   title: string;
+  headerRight?: ReactNode;
 }
 
-const Header: React.FC<HeaderProps> = ({ title }) => {
+const Header: React.FC<HeaderProps> = ({ title, headerRight, children }) => {
   const {navigate} = useNavigation()
 
   const handleGoBackButton = useCallback(() => {
@@ -28,7 +29,11 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
 
        <Image source={LogoImage} resizeMode='contain'/>
      </View>
-      <Text style={styles.title}>{title}</Text>
+      <View style={styles.topBar}>
+        <Text style={styles.title}>{title}</Text>
+        {headerRight}
+      </View>
+      {children}
    </View>
  ) 
 }
