@@ -55,9 +55,8 @@ const TeacherForm: React.FC = () => {
         cost: Number(cost),
         schedule: scheduleItem,
       });
-      alert('Cadastro feito com sucesso!');
 
-      history.push('/');
+      history.push('/success-class');
     } catch (err) {
       throw new Error('Ocorreu um erro ao cadastrar a aula. Tente novamente');
     }

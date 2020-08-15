@@ -1,0 +1,28 @@
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin: 3.2rem 0;
+}
+
+.button {
+  width: 100%;
+  height: 56px;
+  border-radius: 0.8rem;
+  font: 700 2.0rem Archivo;
+  border: 0;
+  background-color: var(--color-secundary);
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+  color: var(--color-button-text);
+
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: var(--color-secundary-dark);
+}
