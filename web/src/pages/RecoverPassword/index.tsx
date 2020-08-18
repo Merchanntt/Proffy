@@ -21,50 +21,48 @@ const ResetPasswordPage: React.FC = () => {
     e.preventDefault();
 
     history.push('/success-recover');
-  }, []);
+  }, [history]);
 
   return (
-    <div id="page-create-account">
-      <Container>
-        <BackgroundContainer>
-          <Content>
-            <ContainerAnimation>
-              <form onSubmit={handleForgetPassword}>
-                <h1>
-                  E agora,
-                </h1>
-                <p>
-                  só falta escolher uma nova senha.
-                </p>
-                <div>
-                  <LogInput
-                    label="Senha"
-                    name="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => { setPassword(e.target.value); }}
-                    color="#04D361"
-                  />
-                  <LogInput
-                    label="Confirmar senha"
-                    name="password-confirmation"
-                    type="password"
-                    value={passwordConfirmation}
-                    onChange={(e) => { setPasswordConfirmation(e.target.value); }}
-                    color="#04D361"
-                  />
-                </div>
-                <Button
-                  label="Recuperar"
-                  type="submit"
+    <Container>
+      <BackgroundContainer>
+        <Content>
+          <ContainerAnimation>
+            <form onSubmit={handleForgetPassword}>
+              <h1>
+                E agora,
+              </h1>
+              <p>
+                só falta escolher uma nova senha.
+              </p>
+              <div>
+                <LogInput
+                  label="Senha"
+                  name="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => { setPassword(e.target.value); }}
+                  color="#04D361"
                 />
-              </form>
-            </ContainerAnimation>
-          </Content>
-        </BackgroundContainer>
+                <LogInput
+                  label="Confirmar senha"
+                  name="password-confirmation"
+                  type="password"
+                  value={passwordConfirmation}
+                  onChange={(e) => { setPasswordConfirmation(e.target.value); }}
+                  color="#04D361"
+                />
+              </div>
+              <Button
+                label="Recuperar"
+                type="submit"
+              />
+            </form>
+          </ContainerAnimation>
+        </Content>
+      </BackgroundContainer>
 
-      </Container>
-    </div>
+    </Container>
   );
 };
 

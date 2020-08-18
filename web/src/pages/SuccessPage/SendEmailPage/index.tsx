@@ -31,7 +31,7 @@ const SendEmailSuccessPage: React.FC = () => {
 
   const handleNavigateClient = useCallback(() => {
     history.push('/');
-  }, []);
+  }, [history]);
 
   return (
     <div id="page-create-account">

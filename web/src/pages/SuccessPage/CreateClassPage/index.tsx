@@ -31,32 +31,31 @@ const CreateClassSuccessPage: React.FC = () => {
 
   const handleNavigateClient = useCallback(() => {
     history.push('/landing');
-  }, []);
+  }, [history]);
 
   return (
-    <div id="page-create-account">
-      <Container>
-        <BackgroundContainer>
-          <Content>
-            <ContainerAnimation>
-              <Animation ref={element} />
-              <h1>
-                Cadastro salvo!
-              </h1>
-              <p>
-                Tudo certo, seu cadastro está na nossa lista de professores.
-                Agora é só ficar de olho no seu WhatsApp.
-              </p>
-              <Button
-                label="Voltar ao login"
-                type="button"
-              />
-            </ContainerAnimation>
-          </Content>
-        </BackgroundContainer>
+    <Container>
+      <BackgroundContainer>
+        <Content>
+          <ContainerAnimation>
+            <Animation ref={element} />
+            <h1>
+              Cadastro salvo!
+            </h1>
+            <p>
+              Tudo certo, seu cadastro está na nossa lista de professores.
+              Agora é só ficar de olho no seu WhatsApp.
+            </p>
+            <Button
+              label="Voltar ao início"
+              type="button"
+              onClick={handleNavigateClient}
+            />
+          </ContainerAnimation>
+        </Content>
+      </BackgroundContainer>
 
-      </Container>
-    </div>
+    </Container>
   );
 };
 

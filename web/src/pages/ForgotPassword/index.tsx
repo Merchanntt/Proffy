@@ -24,53 +24,51 @@ const ForgotPasswordPage: React.FC = () => {
     e.preventDefault();
 
     history.push('/success-send');
-  }, []);
+  }, [history]);
 
   return (
-    <div id="page-create-account">
-      <Container>
-        <Content>
-          <ContainerAnimation>
-            <ChevronContainer>
-              <Link to="/">
-                <FiArrowLeft size={20} color="#8257E5" />
-              </Link>
-            </ChevronContainer>
-            <form onSubmit={handleForgetPassword}>
-              <h1>
-                Eita, esqueceu
-                {' '}
-                <br />
-                {' '}
-                sua senha?
-              </h1>
-              <p>
-                Não esquenta, vamos dar um jeito nisso.
-              </p>
-              <div>
-                <LogInput
-                  label="E-mail"
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => { setEmail(e.target.value); }}
-                />
-              </div>
-              <Button
-                label="Enviar"
-                type="submit"
+    <Container>
+      <Content>
+        <ContainerAnimation>
+          <ChevronContainer>
+            <Link to="/">
+              <FiArrowLeft size={20} color="#8257E5" />
+            </Link>
+          </ChevronContainer>
+          <form onSubmit={handleForgetPassword}>
+            <h1>
+              Eita, esqueceu
+              {' '}
+              <br />
+              {' '}
+              sua senha?
+            </h1>
+            <p>
+              Não esquenta, vamos dar um jeito nisso.
+            </p>
+            <div>
+              <LogInput
+                label="E-mail"
+                name="email"
+                type="email"
+                value={email}
+                onChange={(e) => { setEmail(e.target.value); }}
               />
-            </form>
-          </ContainerAnimation>
-        </Content>
-        <BackgroundContainer>
-          <div className="logo-container">
-            <img src={LogoImg} alt="Proffy" />
-            <h2>Sua Plataforma de estudos online.</h2>
-          </div>
-        </BackgroundContainer>
-      </Container>
-    </div>
+            </div>
+            <Button
+              label="Enviar"
+              type="submit"
+            />
+          </form>
+        </ContainerAnimation>
+      </Content>
+      <BackgroundContainer>
+        <div className="logo-container">
+          <img src={LogoImg} alt="Proffy" />
+          <h2>Sua Plataforma de estudos online.</h2>
+        </div>
+      </BackgroundContainer>
+    </Container>
   );
 };
 

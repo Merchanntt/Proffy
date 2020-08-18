@@ -8,7 +8,13 @@
 
   color: var(--color-text-in-primary);
   background: var(--color-primary);
+}
 
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .logo-container img {
@@ -96,9 +102,9 @@
     max-width: 1100px;
 
     display: grid;
-    grid-template-rows: 350px 1fr;
+    grid-template-rows: 60px 350px 1fr;
     grid-template-columns: 2fr 1fr 1fr;
-    grid-template-areas: 'logo hero hero' 'buttons buttons total' ;
+    grid-template-areas: 'header header header' 'logo hero hero' 'buttons buttons total' ;
   }
 
   .logo-container {

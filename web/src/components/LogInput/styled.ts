@@ -36,7 +36,7 @@ export const WrapperFormField = styled.div<DivProps>`
       left: -0.1rem;
     }
 
-    & + div {
+    & + & {
       margin-top: 0;
       border-top-right-radius: 0;
       border-top-left-radius: 0;
@@ -45,8 +45,16 @@ export const WrapperFormField = styled.div<DivProps>`
       border-top: 0;
     }
 
-    & + & + div {
+    & + & + & {
       border-radius: 0;
+    }
+
+    & + & + & + & {
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      border-top: 0;
     }
 
 `;

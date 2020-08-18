@@ -32,7 +32,7 @@ const TeacherList: React.FC = () => {
 
   return (
     <div id="page-teacher-list" className="container">
-      <Header title="Estes são os proffys disponíveis.">
+      <Header title="Estes são os proffys disponíveis." header="Estudar">
         <form id="search-teachers" onSubmit={handleSearchClass}>
           <Select
             label="Matérias"

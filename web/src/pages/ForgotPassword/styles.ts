@@ -49,7 +49,7 @@ export const ContainerAnimation = styled.div`
   animation: ${appearFromRight} 1s;
   form {
     width: 340px;
-    text-align: center;
+    text-align: start;
     h1 {
       display: flex;
       flex: 1;

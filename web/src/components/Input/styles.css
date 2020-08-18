@@ -1,8 +1,5 @@
  .input-block {
   position: relative;
-}
-
- .input-block + .input-block {
   margin-top: 1.4rem;
 }
 

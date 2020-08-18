@@ -7,16 +7,20 @@ import Logo from '../../assets/images/logo.svg';
 import Back from '../../assets/images/icons/back.svg';
 
 interface HeaderProps {
-  title: string;
+  title?: string;
+  header: string;
   description?: string;
 }
 
-const Header:React.FC<HeaderProps> = ({ title, description, children }) => (
+const Header:React.FC<HeaderProps> = ({
+  title, description, header, children,
+}) => (
   <header className="page-header">
     <div className="top-bar-container">
       <Link to="/">
         <img src={Back} alt="back" />
       </Link>
+      <p>{header}</p>
       <img src={Logo} alt="Proffy" />
     </div>
 

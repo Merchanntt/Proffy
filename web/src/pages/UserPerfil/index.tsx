@@ -1,5 +1,6 @@
 import React, { useState, useCallback, FormEvent } from 'react';
 import { useHistory } from 'react-router-dom';
+import { FiCamera } from 'react-icons/fi';
 
 import Header from '../../components/Header';
 import Input from '../../components/Input';
@@ -10,15 +11,15 @@ import api from '../../services/api';
 import WarningImage from '../../assets/images/icons/warning.svg';
 
 import './styles.css';
+import { NameInput, ContactInput } from './styled';
 
-const TeacherForm: React.FC = () => {
+const UserPerfil: React.FC = () => {
   const [name, setName] = useState('');
+  const [lastname, setLastName] = useState('');
   const [avatar, setAvatar] = useState('');
+  const [email, setEmail] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [bio, setBio] = useState('');
-
-  const [subject, setSubject] = useState('');
-  const [cost, setCost] = useState('');
 
   const [scheduleItem, setScheduleItem] = useState([
     { week_day: 0, from: '', to: '' },
@@ -51,8 +52,6 @@ const TeacherForm: React.FC = () => {
         avatar,
         whatsapp,
         bio,
-        subject,
-        cost: Number(cost),
         schedule: scheduleItem,
       });
 
@@ -65,8 +64,6 @@ const TeacherForm: React.FC = () => {
     avatar,
     whatsapp,
     bio,
-    subject,
-    cost,
     scheduleItem,
     history,
   ]);
@@ -74,34 +71,52 @@ const TeacherForm: React.FC = () => {
   return (
     <div id="page-teacher-form" className="container">
       <Header
-        title="Que incrível que você quer dar aulas."
-        description="O primeiro passo, é preencher esse formulário de incrição."
-        header="Dar aulas"
-      />
+        header="Meu perfil"
+      >
+        <div className="photo-container">
+          <img src="https://avatars1.githubusercontent.com/u/62671334?s=460&u=91206c73c0af9f7d8e39295255531539351f5ff3&v=4" alt="mylove" />
+          <div className="icon">
+            <button type="button">
+              <FiCamera size={16} />
+            </button>
+          </div>
+        </div>
+        <p>Adolfo Cornelius</p>
+      </Header>
       <main>
         <form onSubmit={handleCreateFormClass}>
 
           <fieldset>
             <legend>Seus Dados</legend>
+            <NameInput>
+              <Input
+                label="Nome"
+                name="name"
+                value={name}
+                onChange={(e) => { setName(e.target.value); }}
+              />
+              <Input
+                label="Sobrenome"
+                name="lastname"
+                value={lastname}
+                onChange={(e) => { setLastName(e.target.value); }}
+              />
+            </NameInput>
+            <ContactInput>
+              <Input
+                label="E-mail"
+                name="e-mail"
+                value={email}
+                onChange={(e) => { setEmail(e.target.value); }}
+              />
+              <Input
+                label="WhatsApp"
+                name="whatsapp"
+                value={whatsapp}
+                onChange={(e) => { setWhatsapp(e.target.value); }}
+              />
+            </ContactInput>
 
-            <Input
-              label="Nome completo"
-              name="name"
-              value={name}
-              onChange={(e) => { setName(e.target.value); }}
-            />
-            <Input
-              label="Foto de Perfil"
-              name="avatar"
-              value={avatar}
-              onChange={(e) => { setAvatar(e.target.value); }}
-            />
-            <Input
-              label="WhatsApp"
-              name="whatsapp"
-              value={whatsapp}
-              onChange={(e) => { setWhatsapp(e.target.value); }}
-            />
             <TextArea
               label="Biografia"
               name="bio"
@@ -112,39 +127,8 @@ const TeacherForm: React.FC = () => {
           </fieldset>
 
           <fieldset>
-            <legend>Sobre as aulas</legend>
-
-            <Select
-              label="Matéria"
-              name="subject"
-              value={subject}
-              onChange={(e) => { setSubject(e.target.value); }}
-              options={[
-                { value: 'Artes', label: 'Artes' },
-                { value: 'Bíologia', label: 'Bíologia' },
-                { value: 'Geografia', label: 'Geografia' },
-                { value: 'Educação Física', label: 'Educação Física' },
-                { value: 'Química', label: 'Química' },
-                { value: 'Física', label: 'Física' },
-                { value: 'Matemática', label: 'Matemática' },
-                { value: 'Português', label: 'Português' },
-                { value: 'História', label: 'História' },
-                { value: 'Filosofia', label: 'Filosofia' },
-                { value: 'Sociologia', label: 'Sociologia' },
-                { value: 'Inglês', label: 'Inglês' },
-              ]}
-            />
-            <Input
-              label="Custo da sua hora por aula"
-              name="cost"
-              value={cost}
-              onChange={(e) => { setCost(e.target.value); }}
-            />
-          </fieldset>
-
-          <fieldset>
             <legend>
-              Horários disponíveis
+              Meus Horários
               <button type="button" onClick={handleNewScheduleItem}>
                 + Novo Horário
               </button>
@@ -182,6 +166,10 @@ const TeacherForm: React.FC = () => {
                   value={item.to}
                   onChange={(e) => setNewScheduleItem(index, 'to', e.target.value)}
                 />
+
+                <button type="button">
+                  Excluir Horário
+                </button>
               </div>
             ))}
           </fieldset>
@@ -195,7 +183,7 @@ const TeacherForm: React.FC = () => {
               Preencha todos os dados
             </p>
             <button type="submit">
-              Salvar cadastro
+              Salvar perfil
             </button>
           </footer>
         </form>
@@ -205,4 +193,4 @@ const TeacherForm: React.FC = () => {
   );
 };
 
-export default TeacherForm;
+export default UserPerfil;
