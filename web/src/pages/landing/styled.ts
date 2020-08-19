@@ -50,3 +50,40 @@ export const UserInfo = styled.div`
     }
   }
 `;
+
+export const UnderPage = styled.div`
+  display: flex;
+  grid-area: buttons;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #E5E5E5;
+  padding: 0 20px;
+  border-radius: 8px;
+
+  div {
+
+    h2 {
+      font-size: 20px;
+      color: #6A6180;
+      font-weight: 500;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: bold;
+      color: #6A6180;
+    }
+  }
+
+  span {
+    position: relative;
+    margin-right: 24px;
+    color: #9C98A6;
+
+    img {
+    position: absolute;
+    right: -4px;
+    bottom: 3px;
+    }
+  }
+`;

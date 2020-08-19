@@ -7,8 +7,10 @@ import Input from '../../components/Input';
 import TextArea from '../../components/TextArea';
 import Select from '../../components/Select';
 import api from '../../services/api';
+import { useAuth } from '../../hooks/AuthContext';
 
 import WarningImage from '../../assets/images/icons/warning.svg';
+import DefaultUser from '../../assets/images/DefaultProfile.jpg';
 
 import './styles.css';
 import { NameInput, ContactInput } from './styled';
@@ -20,6 +22,8 @@ const UserPerfil: React.FC = () => {
   const [email, setEmail] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [bio, setBio] = useState('');
+
+  const { user } = useAuth();
 
   const [scheduleItem, setScheduleItem] = useState([
     { week_day: 0, from: '', to: '' },
@@ -74,14 +78,18 @@ const UserPerfil: React.FC = () => {
         header="Meu perfil"
       >
         <div className="photo-container">
-          <img src="https://avatars1.githubusercontent.com/u/62671334?s=460&u=91206c73c0af9f7d8e39295255531539351f5ff3&v=4" alt="mylove" />
+          <img src={user.avatar ? user.avatar : DefaultUser} alt={user.name} />
           <div className="icon">
             <button type="button">
               <FiCamera size={16} />
             </button>
           </div>
         </div>
-        <p>Adolfo Cornelius</p>
+        <p>
+          {user.name}
+          {' '}
+          {user.lastname}
+        </p>
       </Header>
       <main>
         <form onSubmit={handleCreateFormClass}>
@@ -92,13 +100,13 @@ const UserPerfil: React.FC = () => {
               <Input
                 label="Nome"
                 name="name"
-                value={name}
+                defaultValue={user.name}
                 onChange={(e) => { setName(e.target.value); }}
               />
               <Input
                 label="Sobrenome"
                 name="lastname"
-                value={lastname}
+                defaultValue={user.lastname}
                 onChange={(e) => { setLastName(e.target.value); }}
               />
             </NameInput>
@@ -106,13 +114,13 @@ const UserPerfil: React.FC = () => {
               <Input
                 label="E-mail"
                 name="e-mail"
-                value={email}
+                defaultValue={user.email}
                 onChange={(e) => { setEmail(e.target.value); }}
               />
               <Input
                 label="WhatsApp"
                 name="whatsapp"
-                value={whatsapp}
+                defaultValue={user.whatsapp}
                 onChange={(e) => { setWhatsapp(e.target.value); }}
               />
             </ContactInput>
@@ -120,10 +128,10 @@ const UserPerfil: React.FC = () => {
             <TextArea
               label="Biografia"
               name="bio"
-              value={bio}
+              description="(Máximo 300 caracteres)"
+              defaultValue={user.bio}
               onChange={(e) => { setBio(e.target.value); }}
             />
-
           </fieldset>
 
           <fieldset>
@@ -166,6 +174,7 @@ const UserPerfil: React.FC = () => {
                   value={item.to}
                   onChange={(e) => setNewScheduleItem(index, 'to', e.target.value)}
                 />
+                <div className="step" />
 
                 <button type="button">
                   Excluir Horário

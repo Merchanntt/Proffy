@@ -1,19 +1,21 @@
 import React, { useState, useCallback, FormEvent } from 'react';
 import { useHistory } from 'react-router-dom';
+import * as Yup from 'yup';
 
 import Header from '../../components/Header';
 import Input from '../../components/Input';
 import TextArea from '../../components/TextArea';
 import Select from '../../components/Select';
 import api from '../../services/api';
+import { useAuth } from '../../hooks/AuthContext';
 
 import WarningImage from '../../assets/images/icons/warning.svg';
+import DefaultUser from '../../assets/images/DefaultProfile.jpg';
 
 import './styles.css';
+import { User, InfoInput, SubjectInput } from './styled';
 
 const TeacherForm: React.FC = () => {
-  const [name, setName] = useState('');
-  const [avatar, setAvatar] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [bio, setBio] = useState('');
 
@@ -23,6 +25,8 @@ const TeacherForm: React.FC = () => {
   const [scheduleItem, setScheduleItem] = useState([
     { week_day: 0, from: '', to: '' },
   ]);
+
+  const { user } = useAuth();
 
   const history = useHistory();
 
@@ -46,23 +50,32 @@ const TeacherForm: React.FC = () => {
     e.preventDefault();
 
     try {
-      await api.post('classes', {
-        name,
-        avatar,
+      const schema = Yup.object().shape({
+        whatsapp: Yup.string().required('WhatsApp obrigatótio').min(10).max(11, 'Digíte um numero válido'),
+        bio: Yup.string().required('Biografía obrigatória').max(300, 'Limite de caracteres excêdido'),
+        subject: Yup.string().required('Matéria obrigatória'),
+        cost: Yup.string().required('Valor obrigatório'),
+      });
+
+      const data = {
         whatsapp,
         bio,
         subject,
         cost: Number(cost),
         schedule: scheduleItem,
+      };
+
+      await schema.validate(data, {
+        abortEarly: false,
       });
+
+      await api.post('classes', data);
 
       history.push('/success-class');
     } catch (err) {
-      throw new Error('Ocorreu um erro ao cadastrar a aula. Tente novamente');
+      console.log(err);
     }
   }, [
-    name,
-    avatar,
     whatsapp,
     bio,
     subject,
@@ -83,29 +96,28 @@ const TeacherForm: React.FC = () => {
 
           <fieldset>
             <legend>Seus Dados</legend>
+            <InfoInput>
+              <User>
+                <img src={user.avatar ? user.avatar : DefaultUser} alt={user.name} />
+                <p>
+                  {user.name}
+                  {' '}
+                  {user.lastname}
+                </p>
+              </User>
+              <Input
+                label="WhatsApp"
+                name="whatsapp"
+                defaultValue={user.whatsapp}
+                onChange={(e) => { setWhatsapp(e.target.value); }}
+              />
+            </InfoInput>
 
-            <Input
-              label="Nome completo"
-              name="name"
-              value={name}
-              onChange={(e) => { setName(e.target.value); }}
-            />
-            <Input
-              label="Foto de Perfil"
-              name="avatar"
-              value={avatar}
-              onChange={(e) => { setAvatar(e.target.value); }}
-            />
-            <Input
-              label="WhatsApp"
-              name="whatsapp"
-              value={whatsapp}
-              onChange={(e) => { setWhatsapp(e.target.value); }}
-            />
             <TextArea
               label="Biografia"
               name="bio"
-              value={bio}
+              description="(Máximo 300 caracteres)"
+              defaultValue={user.bio}
               onChange={(e) => { setBio(e.target.value); }}
             />
 
@@ -113,33 +125,35 @@ const TeacherForm: React.FC = () => {
 
           <fieldset>
             <legend>Sobre as aulas</legend>
+            <SubjectInput>
+              <Select
+                label="Matéria"
+                name="subject"
+                value={subject}
+                onChange={(e) => { setSubject(e.target.value); }}
+                options={[
+                  { value: 'Artes', label: 'Artes' },
+                  { value: 'Bíologia', label: 'Bíologia' },
+                  { value: 'Geografia', label: 'Geografia' },
+                  { value: 'Educação Física', label: 'Educação Física' },
+                  { value: 'Química', label: 'Química' },
+                  { value: 'Física', label: 'Física' },
+                  { value: 'Matemática', label: 'Matemática' },
+                  { value: 'Português', label: 'Português' },
+                  { value: 'História', label: 'História' },
+                  { value: 'Filosofia', label: 'Filosofia' },
+                  { value: 'Sociologia', label: 'Sociologia' },
+                  { value: 'Inglês', label: 'Inglês' },
+                ]}
+              />
+              <Input
+                label="Custo da sua hora por aula"
+                name="cost"
+                value={cost}
+                onChange={(e) => { setCost(e.target.value); }}
+              />
+            </SubjectInput>
 
-            <Select
-              label="Matéria"
-              name="subject"
-              value={subject}
-              onChange={(e) => { setSubject(e.target.value); }}
-              options={[
-                { value: 'Artes', label: 'Artes' },
-                { value: 'Bíologia', label: 'Bíologia' },
-                { value: 'Geografia', label: 'Geografia' },
-                { value: 'Educação Física', label: 'Educação Física' },
-                { value: 'Química', label: 'Química' },
-                { value: 'Física', label: 'Física' },
-                { value: 'Matemática', label: 'Matemática' },
-                { value: 'Português', label: 'Português' },
-                { value: 'História', label: 'História' },
-                { value: 'Filosofia', label: 'Filosofia' },
-                { value: 'Sociologia', label: 'Sociologia' },
-                { value: 'Inglês', label: 'Inglês' },
-              ]}
-            />
-            <Input
-              label="Custo da sua hora por aula"
-              name="cost"
-              value={cost}
-              onChange={(e) => { setCost(e.target.value); }}
-            />
           </fieldset>
 
           <fieldset>

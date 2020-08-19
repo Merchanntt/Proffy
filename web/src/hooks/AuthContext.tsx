@@ -6,6 +6,7 @@ import api from '../services/api';
 interface UserData {
   id: number;
   name: string;
+  email: string;
   lastname: string;
   avatar?: string;
   whatsapp?: string;
@@ -20,7 +21,7 @@ interface SignInProps {
 
 interface DataState {
   token: string;
-  UserDataFormated: UserData;
+  user: UserData;
 }
 
 interface AuthContextProvider {
@@ -34,10 +35,10 @@ const AuthContext = createContext<AuthContextProvider>({} as AuthContextProvider
 export const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<DataState>(() => {
     const token = localStorage.getItem('@Proffy:token');
-    const UserDataFormated = localStorage.getItem('@Proffy:user');
+    const user = localStorage.getItem('@Proffy:user');
 
-    if (token && UserDataFormated) {
-      return { token, UserDataFormated: JSON.parse(UserDataFormated) };
+    if (token && user) {
+      return { token, user: JSON.parse(user) };
     }
 
     return {} as DataState;
@@ -50,22 +51,17 @@ export const AuthProvider: React.FC = ({ children }) => {
         password,
       });
 
-      const { token, UserDataFormated } = response.data;
+      const { token, user } = response.data;
 
-      if (!remember) {
+      if (remember) {
         localStorage.setItem('@Proffy:token', token);
-        localStorage.setItem('@Proffy:user', JSON.stringify(UserDataFormated));
-
-        setTimeout(() => {
-          localStorage.removeItem('@Proffy:token');
-          localStorage.removeItem('@Proffy:user');
-        }, 600000);
+        localStorage.setItem('@Proffy:user', JSON.stringify(user));
       }
 
-      localStorage.setItem('@Proffy:token', token);
-      localStorage.setItem('@Proffy:user', JSON.stringify(UserDataFormated));
+      sessionStorage.setItem('@Proffy:token', token);
+      sessionStorage.setItem('@Proffy:user', JSON.stringify(user));
 
-      setData({ token, UserDataFormated });
+      setData({ token, user });
     } catch (error) {
       console.log('User not Found');
     }
@@ -75,11 +71,14 @@ export const AuthProvider: React.FC = ({ children }) => {
     localStorage.removeItem('@Proffy:token');
     localStorage.removeItem('@Proffy:user');
 
+    sessionStorage.removeItem('@Proffy:token');
+    sessionStorage.removeItem('@Proffy:user');
+
     setData({} as DataState);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user: data.UserDataFormated, SignIn, SignOut }}>
+    <AuthContext.Provider value={{ user: data.user, SignIn, SignOut }}>
       {children}
     </AuthContext.Provider>
   );

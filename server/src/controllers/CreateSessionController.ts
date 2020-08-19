@@ -26,7 +26,7 @@ export default class CreateSessionsController {
       return response.status(401).json({ error: 'Wrong email/password' });
     }
 
-    const UserDataFormated = findUser.map((item: UserDataInfo) => ({
+    const user = findUser.map((item: UserDataInfo) => ({
       id: item.id,
       name: item.name,
       lastname: item.lastname,
@@ -34,7 +34,7 @@ export default class CreateSessionsController {
       avatar: item.avatar,
       whatsapp: item.whatsapp,
       bio: item.bio,
-    }));
+    })).pop();
 
     const findId = findUser.map((item: UserDataInfo) => ({
       id: item.id,
@@ -44,6 +44,6 @@ export default class CreateSessionsController {
       subject: String(findId),
     });
 
-    return response.status(201).json({ UserDataFormated, token });
+    return response.status(201).json({ user, token });
   }
 }

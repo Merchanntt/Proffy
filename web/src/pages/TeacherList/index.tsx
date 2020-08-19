@@ -1,5 +1,4 @@
 import React, { useState, useCallback, FormEvent } from 'react';
-import { FiSend } from 'react-icons/fi';
 import api from '../../services/api';
 import Header from '../../components/Header';
 
@@ -19,15 +18,19 @@ const TeacherList: React.FC = () => {
   const handleSearchClass = useCallback(async (e: FormEvent) => {
     e.preventDefault();
 
-    const response = await api.get('classes', {
-      params: {
-        week_day,
-        subject,
-        time,
-      },
-    });
+    try {
+      const response = await api.get('classes', {
+        params: {
+          week_day,
+          subject,
+          time,
+        },
+      });
 
-    setClasses(response.data);
+      setClasses(response.data);
+    } catch (error) {
+      alert('Nenhum Professor Encontrado');
+    }
   }, [week_day, subject, time]);
 
   return (
@@ -80,7 +83,6 @@ const TeacherList: React.FC = () => {
           />
           <button type="submit">
             Buscar
-            <FiSend size={20} style={{ marginLeft: 10 }} />
           </button>
         </form>
       </Header>

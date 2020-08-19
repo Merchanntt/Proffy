@@ -4,7 +4,16 @@
 }
 
  .textarea-block label {
+  display: flex;
   font-size: 1.4rem;
+  flex-direction: row;
+  align-items: center;
+}
+
+.textarea-block label p {
+  color: #C1BCCC;
+  font: 400 1.2rem Poppins;
+  margin-left: 1.6rem;
 }
 
  .textarea-block textarea {
