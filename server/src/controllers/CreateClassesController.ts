@@ -42,27 +42,15 @@ export default class CreateClassesController {
 
   async create(request: Request, response: Response) {
     const {
-      name,
-      avatar,
-      whatsapp,
-      bio,
       subject,
       cost,
       schedule,
     } = request.body;
 
     const trx = await db.transaction();
-
+    console.log(subject, cost, schedule);
     try {
-      await trx('users').insert({
-        name,
-        avatar,
-        whatsapp,
-        bio,
-      });
-
       const user_id = request.user.id;
-
       const classReturnId = await trx('classes').insert({
         subject,
         cost,
