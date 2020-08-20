@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { sign } from 'jsonwebtoken';
 import { hash } from 'bcryptjs';
+import path from 'path';
 import db from '../database/connections';
 import authConfig from '../config/auth';
 
@@ -14,7 +15,7 @@ export default class ForgotPasswordController {
 
     try {
       const findEmail = await (
-        await db.select('id', 'email')
+        await db.select('*')
           .from('users')
           .where('email', '=', email))
         .pop();
@@ -26,10 +27,24 @@ export default class ForgotPasswordController {
         tolken,
       });
 
-      await mailProvider.sendMail(
-        email,
-        `Email de recuperação: ${tolken}`,
-      );
+      const completeName = `${findEmail.name} ${findEmail.lastname}`;
+
+      const emailTemplateView = path.resolve(__dirname, '..', 'view', 'ForgetPassword.hbs');
+
+      await mailProvider.sendMail({
+        to: {
+          name: completeName,
+          email: findEmail.email,
+        },
+        subject: '[Proffy] Recuperação de senha',
+        templateData: {
+          file: emailTemplateView,
+          variables: {
+            name: completeName,
+            link: `http://localhost:3000/recover-password?token=${tolken}`,
+          },
+        },
+      });
 
       return response.status(200).json({ message: 'email send' });
     } catch (error) {

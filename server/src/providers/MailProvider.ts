@@ -1,4 +1,19 @@
 import nodemailer, { Transporter } from 'nodemailer';
+import TemplateMailProvider, { ParseData } from './TemplateMailProvider';
+
+interface ContactInfo {
+  name: string;
+  email: string;
+}
+
+interface SendMailData {
+  to: ContactInfo;
+  from?: ContactInfo;
+  subject: string;
+  templateData: ParseData;
+}
+
+const templateMailProvider = new TemplateMailProvider();
 
 export default class MailProvider {
   private client: Transporter | undefined;
@@ -19,12 +34,20 @@ export default class MailProvider {
     });
   }
 
-  async sendMail(to: string, body: string): Promise<void> {
+  async sendMail({
+    to, subject, templateData, from,
+  }: SendMailData): Promise<void> {
     const email = await this.client?.sendMail({
-      from: 'Equipe Proffy <equipe@proffy.com>',
-      to,
-      subject: 'Recuperação de senha',
-      text: body,
+      from: {
+        name: from?.name || 'Equipe Proffy',
+        address: from?.email || 'equipe@proffy.com',
+      },
+      to: {
+        name: to.name,
+        address: to.email,
+      },
+      subject,
+      html: await templateMailProvider.parse(templateData),
     });
 
     console.log('Message sent: %s', email.messageId);

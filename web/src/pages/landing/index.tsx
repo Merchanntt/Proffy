@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPower } from 'react-icons/fi';
+import LoadingBar from 'react-top-loading-bar';
 
 import LogoImg from '../../assets/images/logo.svg';
 import LandingImage from '../../assets/images/landing.svg';
@@ -19,6 +20,7 @@ import { Header, UserInfo, UnderPage } from './styled';
 const LandingPage: React.FC = () => {
   const [totalConnections, setTotalConnections] = useState(0);
   const { user, SignOut } = useAuth();
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     api.get('connections').then((response) => {
@@ -35,6 +37,7 @@ const LandingPage: React.FC = () => {
   return (
     <div id="page-landing">
       <div id="page-landing-content" className="container">
+        <LoadingBar progress={progress} color="#04D361" loaderSpeed={1000} />
         <Header>
           <UserInfo>
             <img src={user.avatar ? user.avatar : DefaultProfile} alt={user.name} />
@@ -79,11 +82,11 @@ const LandingPage: React.FC = () => {
             <img src={PurpleHeart} alt="PurpleHeart" />
           </span>
           <div className="buttons-container">
-            <Link to="/study" className="study">
+            <Link to="/study" className="study" onClick={() => setProgress(progress + 90)}>
               <img src={Study} alt="Study" />
               Estudar
             </Link>
-            <Link to="/give-classes" className="give-classes">
+            <Link to="/give-classes" className="give-classes" onClick={() => setProgress(progress + 90)}>
               <img src={GiveClasses} alt="classes" />
               Dar aulas
             </Link>

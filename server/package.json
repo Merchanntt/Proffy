@@ -29,6 +29,7 @@
     "eslint-plugin-react": "7.20.0",
     "eslint-plugin-react-hooks": "^4.0.8",
     "express": "^4.17.1",
+    "handlebars": "^4.7.6",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.2",
     "nodemailer": "^6.4.11",

@@ -1,6 +1,7 @@
 import React, { useState, useCallback, FormEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FiCamera } from 'react-icons/fi';
+import LoadingBar from 'react-top-loading-bar';
 
 import Header from '../../components/Header';
 import Input from '../../components/Input';
@@ -22,6 +23,8 @@ const UserPerfil: React.FC = () => {
   const [email, setEmail] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [bio, setBio] = useState('');
+
+  const [progress, setProgress] = useState(0);
 
   const { user } = useAuth();
 
@@ -74,6 +77,8 @@ const UserPerfil: React.FC = () => {
 
   return (
     <div id="page-teacher-form" className="container">
+      <LoadingBar progress={progress} color="#04D361" loaderSpeed={1000} />
+
       <Header
         header="Meu perfil"
       >

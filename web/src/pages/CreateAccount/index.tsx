@@ -4,6 +4,7 @@ import React, {
 import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import * as Yup from 'yup';
+import LoadingBar from 'react-top-loading-bar';
 
 import LogoImg from '../../assets/images/logo.svg';
 
@@ -26,12 +27,16 @@ const CreateAccountPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [progress, setProgress] = useState(0);
+
   const history = useHistory();
 
   const handleForgetPassword = useCallback(async (e: FormEvent) => {
     e.preventDefault();
 
     try {
+      setProgress(progress + 70);
+
       const schema = Yup.object().shape({
         name: Yup.string().required('Nome é obrigatório'),
         lastname: Yup.string().required('Sobrenome é obrigatório'),
@@ -52,6 +57,7 @@ const CreateAccountPage: React.FC = () => {
 
       await api.post('users', data);
 
+      setProgress(100);
       history.push('/success-user');
     } catch (error) {
       console.log(error);
@@ -60,6 +66,7 @@ const CreateAccountPage: React.FC = () => {
 
   return (
     <Container>
+      <LoadingBar progress={progress} color="#04D361" loaderSpeed={2000} />
       <Content>
         <ContainerAnimation>
           <ChevronContainer>

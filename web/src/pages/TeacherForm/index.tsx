@@ -1,5 +1,6 @@
 import React, { useState, useCallback, FormEvent } from 'react';
 import { useHistory } from 'react-router-dom';
+import LoadingBar from 'react-top-loading-bar';
 import * as Yup from 'yup';
 
 import Header from '../../components/Header';
@@ -16,6 +17,8 @@ import './styles.css';
 import { User, InfoInput, SubjectInput } from './styled';
 
 const TeacherForm: React.FC = () => {
+  const [progress, setProgress] = useState(0);
+
   const [whatsapp, setWhatsapp] = useState('');
   const [bio, setBio] = useState('');
 
@@ -50,6 +53,7 @@ const TeacherForm: React.FC = () => {
     e.preventDefault();
 
     try {
+      setProgress(progress + 70);
       const schema = Yup.object().shape({
         whatsapp: Yup.string().required('WhatsApp obrigatótio').min(10).max(11, 'Digíte um numero válido'),
         bio: Yup.string().required('Biografía obrigatória').max(300, 'Limite de caracteres excêdido'),
@@ -71,6 +75,7 @@ const TeacherForm: React.FC = () => {
 
       await api.post('classes', data);
 
+      setProgress(100);
       history.push('/success-class');
     } catch (err) {
       console.log(err);
@@ -82,10 +87,12 @@ const TeacherForm: React.FC = () => {
     cost,
     scheduleItem,
     history,
+    progress,
   ]);
 
   return (
     <div id="page-teacher-form" className="container">
+      <LoadingBar progress={progress} color="#04D361" loaderSpeed={4000} />
       <Header
         title="Que incrível que você quer dar aulas."
         description="O primeiro passo, é preencher esse formulário de incrição."

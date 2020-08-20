@@ -10,6 +10,8 @@ export async function up(knex: Knex) {
     table.string('avatar');
     table.string('whatsapp');
     table.string('bio');
+    table.timestamp('created_at').defaultTo(knex.raw('CURRENT_TIMESTAMP')).notNullable();
+    table.timestamp('updated_at').defaultTo(knex.raw('CURRENT_TIMESTAMP')).notNullable();
   });
 }
 

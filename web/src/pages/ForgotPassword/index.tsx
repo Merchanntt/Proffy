@@ -1,6 +1,8 @@
 import React, { useState, useCallback, FormEvent } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
+import LoadingBar from 'react-top-loading-bar';
+import api from '../../services/api';
 
 import LogoImg from '../../assets/images/logo.svg';
 
@@ -17,17 +19,25 @@ import {
 
 const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [progress, setProgress] = useState(0);
 
   const history = useHistory();
 
-  const handleForgetPassword = useCallback((e: FormEvent) => {
+  const handleForgetPassword = useCallback(async (e: FormEvent) => {
     e.preventDefault();
 
+    setProgress(progress + 70);
+    await api.post('/send-email', {
+      email,
+    });
+
+    setProgress(100);
     history.push('/success-send');
-  }, [history]);
+  }, [history, email, progress]);
 
   return (
     <Container>
+      <LoadingBar progress={progress} color="#04D361" loaderSpeed={4000} />
       <Content>
         <ContainerAnimation>
           <ChevronContainer>

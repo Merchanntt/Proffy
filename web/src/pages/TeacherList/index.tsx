@@ -1,4 +1,5 @@
 import React, { useState, useCallback, FormEvent } from 'react';
+import LoadingBar from 'react-top-loading-bar';
 import api from '../../services/api';
 import Header from '../../components/Header';
 
@@ -10,6 +11,7 @@ import './styles.css';
 
 const TeacherList: React.FC = () => {
   const [classes, setClasses] = useState([]);
+  const [progress, setProgress] = useState(0);
 
   const [subject, setSubject] = useState('');
   const [week_day, setWeekDay] = useState('');
@@ -19,6 +21,7 @@ const TeacherList: React.FC = () => {
     e.preventDefault();
 
     try {
+      setProgress(progress + 10);
       const response = await api.get('classes', {
         params: {
           week_day,
@@ -27,14 +30,16 @@ const TeacherList: React.FC = () => {
         },
       });
 
+      setProgress(100);
       setClasses(response.data);
     } catch (error) {
       alert('Nenhum Professor Encontrado');
     }
-  }, [week_day, subject, time]);
+  }, [week_day, subject, time, progress]);
 
   return (
     <div id="page-teacher-list" className="container">
+      <LoadingBar progress={progress} color="#04D361" loaderSpeed={4000} />
       <Header title="Estes são os proffys disponíveis." header="Estudar">
         <form id="search-teachers" onSubmit={handleSearchClass}>
           <Select

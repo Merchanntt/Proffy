@@ -1,6 +1,9 @@
-import React, { useState, useCallback, FormEvent } from 'react';
+import React, {
+  useState, useCallback, FormEvent,
+} from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
+import LoadingBar from 'react-top-loading-bar';
 
 import { useAuth } from '../../hooks/AuthContext';
 
@@ -27,6 +30,7 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const history = useHistory();
   const { SignIn } = useAuth();
@@ -35,6 +39,7 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
 
     try {
+      setProgress(progress + 10);
       const schema = Yup.object().shape({
         email: Yup.string().required('E-mail obrigatória'),
         password: Yup.string().required('Senha obrigatória'),
@@ -48,17 +53,20 @@ const LoginPage: React.FC = () => {
       await schema.validate(data, {
         abortEarly: false,
       });
+      setProgress(progress + 70);
 
-      SignIn({ email, password, remember });
-
-      history.push('/landing');
+      SignIn({ email, password, remember }).then(() => {
+        setProgress(100);
+        history.push('/landing');
+      });
     } catch (error) {
       console.log(error);
     }
-  }, [email, password, history, remember, SignIn]);
+  }, [email, password, history, remember, SignIn, progress]);
 
   return (
     <Container>
+      <LoadingBar progress={progress} color="#04D361" loaderSpeed={3000} />
       <BackgroundContainer>
         <div className="logo-container">
           <img src={LogoImg} alt="Proffy" />
