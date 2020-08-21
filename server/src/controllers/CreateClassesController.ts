@@ -24,7 +24,7 @@ export default class CreateClassesController {
 
     const timeInMinutes = convertTimeInMinutes(time);
 
-    const classes = await db('classes')
+    const classesArray = await db('classes')
       .whereExists(function () {
         this.select('class_schedule.*')
           .from('class_schedule')
@@ -37,6 +37,11 @@ export default class CreateClassesController {
       .join('users', 'classes.user_id', '=', 'users.id')
       .select(['classes.*', 'users.*']);
 
+    const classes = classesArray.pop();
+
+    classes.password = null;
+    classes.avatar = `http://192.168.1.101:3333/files/${classes.avatar}`;
+
     return response.json(classes);
   }
 
@@ -48,7 +53,6 @@ export default class CreateClassesController {
     } = request.body;
 
     const trx = await db.transaction();
-    console.log(subject, cost, schedule);
     try {
       const user_id = request.user.id;
       const classReturnId = await trx('classes').insert({

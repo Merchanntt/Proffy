@@ -14,28 +14,6 @@ export interface UserDataInfo {
 }
 
 export default class CreateUserController {
-  async index(request: Request, response: Response) {
-    const { id } = request.params;
-
-    const UserData = await db.select('*').from('users').where('id', '=', id);
-
-    if (UserData.length === 0) {
-      return response.status(401).json({ error: "user dosen't existis" });
-    }
-
-    const UserDataFormated = UserData.map((item: UserDataInfo) => ({
-      id: item.id,
-      name: item.name,
-      lastname: item.lastname,
-      email: item.email,
-      avatar: item.avatar,
-      whatsapp: item.whatsapp,
-      bio: item.bio,
-    }));
-
-    return response.json(UserDataFormated);
-  }
-
   async create(request: Request, response: Response) {
     const {
       name, lastname, email, password,
