@@ -24,7 +24,7 @@
   border-radius: 50%;
 }
 
-#page-teacher-form .page-header .header-content .photo-container .icon button{
+#page-teacher-form .page-header .header-content .photo-container .icon label{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,8 +41,12 @@
   transition: background-color 0.3s;
 }
 
-#page-teacher-form .page-header .header-content .photo-container .icon button:hover{
+#page-teacher-form .page-header .header-content .photo-container .icon label:hover{
   background-color: #01b452;
+}
+
+#page-teacher-form .page-header .header-content .photo-container .icon input {
+  display: none;
 }
 
 #page-teacher-form .page-header .header-content p {

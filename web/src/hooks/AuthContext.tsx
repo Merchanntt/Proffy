@@ -28,6 +28,7 @@ interface AuthContextProvider {
   user: UserData;
   SignIn(credentials: SignInProps): Promise<void>;
   SignOut(): void;
+  UpdateAvatar(user: UserData): void;
 }
 
 const AuthContext = createContext<AuthContextProvider>({} as AuthContextProvider);
@@ -38,6 +39,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     const user = localStorage.getItem('@Proffy:user');
 
     if (token && user) {
+      api.defaults.headers.authorization = `Bearer ${token}`;
       return { token, user: JSON.parse(user) };
     }
 
@@ -58,6 +60,8 @@ export const AuthProvider: React.FC = ({ children }) => {
         localStorage.setItem('@Proffy:user', JSON.stringify(user));
       }
 
+      api.defaults.headers.authorization = `Bearer ${token}`;
+
       sessionStorage.setItem('@Proffy:token', token);
       sessionStorage.setItem('@Proffy:user', JSON.stringify(user));
 
@@ -77,8 +81,26 @@ export const AuthProvider: React.FC = ({ children }) => {
     setData({} as DataState);
   }, []);
 
+  const UpdateAvatar = useCallback((user: UserData) => {
+    const userData = localStorage.getItem('@Proffy:user');
+
+    if (userData) {
+      localStorage.setItem('@Proffy:user', JSON.stringify(user));
+    }
+
+    sessionStorage.setItem('@Proffy:user', JSON.stringify(user));
+
+    setData({
+      token: data.token,
+      user,
+    });
+  }, [data.token]);
+
   return (
-    <AuthContext.Provider value={{ user: data.user, SignIn, SignOut }}>
+    <AuthContext.Provider value={{
+      user: data.user, SignIn, SignOut, UpdateAvatar,
+    }}
+    >
       {children}
     </AuthContext.Provider>
   );

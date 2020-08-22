@@ -1,4 +1,6 @@
-import React, { useState, useCallback, FormEvent } from 'react';
+import React, {
+  useState, useCallback, FormEvent, ChangeEvent,
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import { FiCamera } from 'react-icons/fi';
 import LoadingBar from 'react-top-loading-bar';
@@ -17,16 +19,15 @@ import './styles.css';
 import { NameInput, ContactInput } from './styled';
 
 const UserPerfil: React.FC = () => {
-  const [name, setName] = useState('');
-  const [lastname, setLastName] = useState('');
-  const [avatar, setAvatar] = useState('');
-  const [email, setEmail] = useState('');
-  const [whatsapp, setWhatsapp] = useState('');
-  const [bio, setBio] = useState('');
+  const { user, UpdateAvatar } = useAuth();
+
+  const [name, setName] = useState(user.name);
+  const [lastname, setLastName] = useState(user.lastname);
+  const [email, setEmail] = useState(user.email);
+  const [whatsapp, setWhatsapp] = useState(user.whatsapp);
+  const [bio, setBio] = useState(user.bio);
 
   const [progress, setProgress] = useState(0);
-
-  const { user } = useAuth();
 
   const [scheduleItem, setScheduleItem] = useState([
     { week_day: 0, from: '', to: '' },
@@ -50,29 +51,48 @@ const UserPerfil: React.FC = () => {
     setScheduleItem(updatedScheduleItems);
   }, [scheduleItem]);
 
-  const handleCreateFormClass = useCallback(async (e: FormEvent) => {
+  const handleSendAvatar = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const data = new FormData();
+
+      data.append('avatar', e.target.files[0]);
+
+      api.patch('/users/avatar', data).then((response) => {
+        setProgress(progress + 100);
+        UpdateAvatar(response.data);
+      });
+    }
+  }, [UpdateAvatar, progress]);
+
+  const handleUpdateUser = useCallback((e: FormEvent) => {
     e.preventDefault();
 
     try {
-      await api.post('classes', {
+      setProgress(progress + 70);
+      api.put('users/profile', {
         name,
-        avatar,
+        lastname,
+        email,
         whatsapp,
         bio,
-        schedule: scheduleItem,
+      }).then((response) => {
+        UpdateAvatar(response.data);
       });
 
-      history.push('/success-class');
+      window.scroll({ top: 0 });
+      setProgress(100);
+      alert('Seu perfil foi atualizado!');
     } catch (err) {
       throw new Error('Ocorreu um erro ao cadastrar a aula. Tente novamente');
     }
   }, [
     name,
-    avatar,
     whatsapp,
     bio,
     scheduleItem,
     history,
+    UpdateAvatar,
+    progress,
   ]);
 
   return (
@@ -85,9 +105,10 @@ const UserPerfil: React.FC = () => {
         <div className="photo-container">
           <img src={user.avatar ? user.avatar : DefaultUser} alt={user.name} />
           <div className="icon">
-            <button type="button">
+            <label htmlFor="avatar">
               <FiCamera size={16} />
-            </button>
+              <input type="file" id="avatar" onChange={handleSendAvatar} />
+            </label>
           </div>
         </div>
         <p>
@@ -97,7 +118,7 @@ const UserPerfil: React.FC = () => {
         </p>
       </Header>
       <main>
-        <form onSubmit={handleCreateFormClass}>
+        <form onSubmit={handleUpdateUser}>
 
           <fieldset>
             <legend>Seus Dados</legend>
@@ -105,13 +126,13 @@ const UserPerfil: React.FC = () => {
               <Input
                 label="Nome"
                 name="name"
-                defaultValue={user.name}
+                value={name}
                 onChange={(e) => { setName(e.target.value); }}
               />
               <Input
                 label="Sobrenome"
                 name="lastname"
-                defaultValue={user.lastname}
+                value={lastname}
                 onChange={(e) => { setLastName(e.target.value); }}
               />
             </NameInput>
@@ -119,13 +140,13 @@ const UserPerfil: React.FC = () => {
               <Input
                 label="E-mail"
                 name="e-mail"
-                defaultValue={user.email}
+                value={email}
                 onChange={(e) => { setEmail(e.target.value); }}
               />
               <Input
                 label="WhatsApp"
                 name="whatsapp"
-                defaultValue={user.whatsapp}
+                value={whatsapp}
                 onChange={(e) => { setWhatsapp(e.target.value); }}
               />
             </ContactInput>
@@ -134,7 +155,7 @@ const UserPerfil: React.FC = () => {
               label="Biografia"
               name="bio"
               description="(Máximo 300 caracteres)"
-              defaultValue={user.bio}
+              value={bio}
               onChange={(e) => { setBio(e.target.value); }}
             />
           </fieldset>
@@ -181,7 +202,7 @@ const UserPerfil: React.FC = () => {
                 />
                 <div className="step" />
 
-                <button type="button">
+                <button type="submit">
                   Excluir Horário
                 </button>
               </div>

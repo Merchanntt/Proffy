@@ -39,7 +39,7 @@ export default class CreateClassesController {
 
     const classes = classesArray.pop();
 
-    classes.password = null;
+    delete classes.password;
     classes.avatar = `http://192.168.1.101:3333/files/${classes.avatar}`;
 
     return response.json(classes);

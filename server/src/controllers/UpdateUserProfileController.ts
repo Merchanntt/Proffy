@@ -32,6 +32,9 @@ export default class UpdateUserProfilleController {
     user.email = email;
     user.whatsapp = whatsapp;
     user.bio = bio;
+    user.avatar = `http://192.168.1.101:3333/files/${user.avatar}`;
+
+    delete user.password;
 
     await db('users').update({
       name: user.name,
@@ -41,7 +44,7 @@ export default class UpdateUserProfilleController {
       bio: user.bio,
     });
 
-    return response.status(200).json({ message: 'your profile was updated' });
+    return response.status(200).json(user);
   }
 
   async patch(request: Request, response: Response) {
@@ -49,7 +52,7 @@ export default class UpdateUserProfilleController {
     const avatar = request.file.filename;
 
     try {
-      const userArray = await db.select('id', 'avatar').from('users').where('id', '=', id);
+      const userArray = await db.select('*').from('users').where('id', '=', id);
       const user = userArray.pop();
 
       if (!user) {
@@ -71,7 +74,10 @@ export default class UpdateUserProfilleController {
         avatar: user.avatar,
       });
 
-      return response.status(201).json({ message: 'avatar changed' });
+      delete user.password;
+      user.avatar = `http://192.168.1.101:3333/files/${avatar}`;
+
+      return response.status(201).json(user);
     } catch (err) {
       return response.status(400).json({ error: err.message });
     }
