@@ -42,7 +42,7 @@ export default class UpdateUserProfilleController {
       email: user.email,
       whatsapp: user.whatsapp,
       bio: user.bio,
-    });
+    }).where('id', '=', id);
 
     return response.status(200).json(user);
   }
@@ -72,7 +72,7 @@ export default class UpdateUserProfilleController {
 
       await db('users').update({
         avatar: user.avatar,
-      });
+      }).where('id', '=', id);
 
       delete user.password;
       user.avatar = `http://192.168.1.101:3333/files/${avatar}`;

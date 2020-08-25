@@ -47,6 +47,8 @@ export default class CreateClassesController {
 
   async create(request: Request, response: Response) {
     const {
+      whatsapp,
+      bio,
       subject,
       cost,
       schedule,
@@ -55,6 +57,21 @@ export default class CreateClassesController {
     const trx = await db.transaction();
     try {
       const user_id = request.user.id;
+
+      const userArray = await trx.select('whatsapp', 'bio').from('users').where('id', '=', user_id);
+
+      const user = userArray.pop();
+
+      if (user.whatsapp !== whatsapp || user.bio !== bio) {
+        user.whatsapp = whatsapp;
+        user.bio = bio;
+
+        await trx('users').update({
+          whatsapp: user.whatsapp,
+          bio: user.bio,
+        }).where('id', '=', user_id);
+      }
+
       const classReturnId = await trx('classes').insert({
         subject,
         cost,
@@ -79,7 +96,7 @@ export default class CreateClassesController {
       await trx.rollback();
 
       return response.status(400).json({
-        error: 'unexpected error in create a new class',
+        error: err.message,
       });
     }
   }

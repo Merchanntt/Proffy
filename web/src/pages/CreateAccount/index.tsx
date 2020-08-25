@@ -62,7 +62,7 @@ const CreateAccountPage: React.FC = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [name, lastname, email, password, history]);
+  }, [name, lastname, email, password, history, progress]);
 
   return (
     <Container>

@@ -87,10 +87,11 @@ const UserPerfil: React.FC = () => {
     }
   }, [
     name,
+    lastname,
+    email,
     whatsapp,
     bio,
     scheduleItem,
-    history,
     UpdateAvatar,
     progress,
   ]);

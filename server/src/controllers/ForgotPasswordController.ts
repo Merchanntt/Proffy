@@ -76,7 +76,7 @@ export default class ForgotPasswordController {
 
       await db('users').update({
         password: findUser.password,
-      });
+      }).where('id', '=', findUser.id);
 
       return response.status(200).json('password reseted');
     } catch (error) {

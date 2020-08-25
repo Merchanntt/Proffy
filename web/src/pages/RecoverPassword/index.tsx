@@ -32,7 +32,7 @@ const ResetPasswordPage: React.FC = () => {
         passwordConfirmation: Yup.string().oneOf([Yup.ref('password')], 'Confirmação incorreta'),
       });
 
-      await schema.validate({ password, setPassword }, {
+      await schema.validate({ password, passwordConfirmation }, {
         abortEarly: false,
       });
 
@@ -52,7 +52,7 @@ const ResetPasswordPage: React.FC = () => {
     } catch (error) {
       alert('Erro ao resetar a senha');
     }
-  }, [history, password, passwordConfirmation, location.search]);
+  }, [history, password, passwordConfirmation, location.search, progress]);
 
   return (
     <Container>
