@@ -1,5 +1,11 @@
 import { Request, Response } from 'express';
 import db from '../database/connections';
+import ConvertTimeinMinutes, { convertMinutesInTime } from '../utils/ConvertTimeInMinutes';
+
+interface ScheduleItems {
+  from: number,
+  to: number,
+}
 
 export default class ScheduleUpdateController {
   async index(request: Request, response: Response) {
@@ -11,7 +17,13 @@ export default class ScheduleUpdateController {
 
     const classesScheduleArray = await db.select('*').from('class_schedule').where('class_id', '=', classes.id);
 
-    return response.status(200).json(classesScheduleArray);
+    const classesSchedule = classesScheduleArray.map((item: ScheduleItems) => ({
+      ...item,
+      to: convertMinutesInTime(item.to),
+      from: convertMinutesInTime(item.from),
+    }));
+
+    return response.status(200).json(classesSchedule);
   }
 
   async update(request: Request, response: Response) {
@@ -24,8 +36,8 @@ export default class ScheduleUpdateController {
     const schedule = classesSchedule.pop();
 
     schedule.week_day = week_day;
-    schedule.to = to;
-    schedule.from = from;
+    schedule.to = ConvertTimeinMinutes(to);
+    schedule.from = ConvertTimeinMinutes(from);
 
     await db('class_schedule').update({
       week_day: schedule.week_day,
@@ -44,5 +56,19 @@ export default class ScheduleUpdateController {
     await db('class_schedule').delete().where('id', '=', id);
 
     return response.status(200).json({ message: 'schedule deleted' });
+  }
+
+  async show(request: Request, response: Response) {
+    const { id } = request.params;
+
+    const classesScheduleArray = await db.select('*').from('class_schedule').where('class_id', '=', id);
+
+    const classesSchedule = classesScheduleArray.map((item: ScheduleItems) => ({
+      ...item,
+      to: convertMinutesInTime(item.to),
+      from: convertMinutesInTime(item.from),
+    }));
+
+    return response.status(200).json(classesSchedule);
   }
 }

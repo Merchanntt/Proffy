@@ -17,10 +17,12 @@ import './styles.css';
 import { User, InfoInput, SubjectInput } from './styled';
 
 const TeacherForm: React.FC = () => {
+  const { user } = useAuth();
+
   const [progress, setProgress] = useState(0);
 
-  const [whatsapp, setWhatsapp] = useState('');
-  const [bio, setBio] = useState('');
+  const [whatsapp, setWhatsapp] = useState(user.whatsapp);
+  const [bio, setBio] = useState(user.bio);
 
   const [subject, setSubject] = useState('');
   const [cost, setCost] = useState('');
@@ -28,8 +30,6 @@ const TeacherForm: React.FC = () => {
   const [scheduleItem, setScheduleItem] = useState([
     { week_day: 0, from: '', to: '' },
   ]);
-
-  const { user } = useAuth();
 
   const history = useHistory();
 
@@ -73,12 +73,13 @@ const TeacherForm: React.FC = () => {
         abortEarly: false,
       });
 
-      await api.post('classes', data);
+      await api.post('users/classes', data);
 
       setProgress(100);
       history.push('/success-class');
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
+      setProgress(100);
     }
   }, [
     whatsapp,
@@ -92,7 +93,7 @@ const TeacherForm: React.FC = () => {
 
   return (
     <div id="page-teacher-form" className="container">
-      <LoadingBar progress={progress} color="#04D361" loaderSpeed={4000} />
+      <LoadingBar progress={progress} color="#04D361" loaderSpeed={3000} />
       <Header
         title="Que incrível que você quer dar aulas."
         description="O primeiro passo, é preencher esse formulário de incrição."
@@ -115,7 +116,7 @@ const TeacherForm: React.FC = () => {
               <Input
                 label="WhatsApp"
                 name="whatsapp"
-                defaultValue={user.whatsapp}
+                value={whatsapp}
                 onChange={(e) => { setWhatsapp(e.target.value); }}
               />
             </InfoInput>
@@ -124,7 +125,7 @@ const TeacherForm: React.FC = () => {
               label="Biografia"
               name="bio"
               description="(Máximo 300 caracteres)"
-              defaultValue={user.bio}
+              value={bio}
               onChange={(e) => { setBio(e.target.value); }}
             />
 

@@ -20,9 +20,11 @@ route.put('/profile', updateUserProfileController.update);
 route.patch('/avatar', upload.single('avatar'), updateUserProfileController.patch);
 
 route.get('/classes', createClassesControler.index);
+route.get('/classes/total', createClassesControler.show);
 route.post('/classes', createClassesControler.create);
 
 route.get('/classes-schedule', scheduleUpdateController.index);
+route.get('/classes-schedule/classes/:id', scheduleUpdateController.show);
 route.put('/classes-schedule', scheduleUpdateController.update);
 route.delete('/classes-schedule/:id', scheduleUpdateController.delete);
 

@@ -4,3 +4,11 @@ export default function convertTimeInMinutes(time: string) {
 
   return timeInMinutes;
 }
+
+export function convertMinutesInTime(time: number) {
+  const minutesIntime = String(time / 60);
+
+  const convertedMinutes = `${minutesIntime}:00`;
+
+  return convertedMinutes;
+}

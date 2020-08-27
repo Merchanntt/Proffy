@@ -24,6 +24,8 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "react/jsx-no-target-blank": "off",
+        "import/no-duplicates": "off",
         "camelcase": "off",
         "no-unused-vars": "off",
         "react/jsx-props-no-spreading": "off",

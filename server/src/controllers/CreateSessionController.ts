@@ -31,7 +31,7 @@ export default class CreateSessionsController {
       name: item.name,
       lastname: item.lastname,
       email: item.email,
-      avatar: `http://192.168.1.101:3333/files/${item.avatar}`,
+      avatar: item.avatar ? `http://192.168.1.101:3333/files/${item.avatar}` : null,
       whatsapp: item.whatsapp,
       bio: item.bio,
     })).pop();

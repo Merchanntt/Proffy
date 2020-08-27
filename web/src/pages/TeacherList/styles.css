@@ -33,6 +33,19 @@
   background: var(--color-secundary-dark);
 }
 
+#page-teacher-list main .not-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 11rem;
+}
+
+#page-teacher-list main .not-found p {
+  font: 400 1.6rem Poppins;
+  color: var(--color-text-complement)
+}
+
 @media (min-width: 700px) {
   #page-teacher-list {
     max-width: 100vw;

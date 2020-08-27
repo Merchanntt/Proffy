@@ -8,6 +8,19 @@ interface ScheduleItems {
   to: string;
 }
 
+interface ClassItems {
+  id: number,
+  subject: string,
+  cost: number,
+  user_id: number,
+  name: string,
+  lastname: string,
+  email: string,
+  avatar: string,
+  whatsapp: string,
+  bio: string;
+}
+
 export default class CreateClassesController {
   async index(request: Request, response: Response) {
     const filters = request.query;
@@ -22,27 +35,43 @@ export default class CreateClassesController {
       });
     }
 
-    const timeInMinutes = convertTimeInMinutes(time);
+    try {
+      const timeInMinutes = convertTimeInMinutes(time);
 
-    const classesArray = await db('classes')
-      .whereExists(function () {
-        this.select('class_schedule.*')
-          .from('class_schedule')
-          .whereRaw('`class_schedule`.`class_id` = `classes`.`id`')
-          .whereRaw('`class_schedule`.`week_day` = ??', [Number(week_day)])
-          .whereRaw('`class_schedule`.`from` <= ??', [timeInMinutes])
-          .whereRaw('`class_schedule`.`to` > ??', [timeInMinutes]);
-      })
-      .where('classes.subject', '=', subject)
-      .join('users', 'classes.user_id', '=', 'users.id')
-      .select(['classes.*', 'users.*']);
+      const classesArray = await db('classes')
+        .whereExists(function () {
+          this.select('class_schedule.*')
+            .from('class_schedule')
+            .whereRaw('`class_schedule`.`class_id` = `classes`.`id`')
+            .whereRaw('`class_schedule`.`week_day` = ??', [Number(week_day)])
+            .whereRaw('`class_schedule`.`from` <= ??', [timeInMinutes])
+            .whereRaw('`class_schedule`.`to` > ??', [timeInMinutes]);
+        })
+        .where('classes.subject', '=', subject)
+        .join('users', 'classes.user_id', '=', 'users.id')
+        .select(['classes.*', 'users.*']);
 
-    const classes = classesArray.pop();
+      const classes = classesArray.map((item: ClassItems) => ({
+        id: item.id,
+        subject: item.subject,
+        cost: item.cost,
+        user_id: item.user_id,
+        name: item.name,
+        lastname: item.lastname,
+        email: item.email,
+        avatar: `http://192.168.1.101:3333/files/${item.avatar}`,
+        whatsapp: item.whatsapp,
+        bio: item.bio,
+      }));
 
-    delete classes.password;
-    classes.avatar = `http://192.168.1.101:3333/files/${classes.avatar}`;
+      if (classes.length === 0) {
+        throw new Error('classes not found');
+      }
 
-    return response.json(classes);
+      return response.json(classes);
+    } catch (err) {
+      return response.status(400).json({ error: err.message });
+    }
   }
 
   async create(request: Request, response: Response) {
@@ -99,5 +128,13 @@ export default class CreateClassesController {
         error: err.message,
       });
     }
+  }
+
+  async show(request: Request, response: Response) {
+    const totalProffessors = await db('classes').count('* as total');
+
+    const { total } = totalProffessors[0];
+
+    return response.json({ total });
   }
 }

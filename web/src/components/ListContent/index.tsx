@@ -1,17 +1,28 @@
-import React, { useCallback } from 'react';
+import React, {
+  useCallback, useState, useEffect,
+} from 'react';
 import { AiOutlineWhatsApp } from 'react-icons/ai';
 import api from '../../services/api';
 
 import './styles.css';
+import { ScheduleContainer, ScheduleCard, ScheduleInfo } from './styled';
 
 export interface Teacher {
   id: number;
-    name: string;
-    avatar: string;
-    whatsapp: string;
-    bio: string;
-    cost: number;
-    subject: string;
+  name: string;
+  lastname: string;
+  avatar: string;
+  whatsapp: string;
+  bio: string;
+  cost: number;
+  subject: string;
+}
+
+interface ScheduleData {
+  id: number;
+  week_day: number;
+  from: string;
+  to: string;
 }
 
 interface ListContentProps {
@@ -19,6 +30,18 @@ interface ListContentProps {
 }
 
 const ListContent: React.FC<ListContentProps> = ({ classes }) => {
+  const [scheduleData, setScheduleData] = useState<ScheduleData[]>([]);
+
+  useEffect(() => {
+    const { id } = classes;
+
+    api.get<ScheduleData[]>(`users/classes-schedule/classes/${id}`).then((response) => {
+      setScheduleData(response.data);
+    });
+  }, [classes]);
+
+  // const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+
   const handleNewConnection = useCallback(() => {
     api.post('connections', {
       user_id: classes.id,
@@ -30,7 +53,11 @@ const ListContent: React.FC<ListContentProps> = ({ classes }) => {
       <header>
         <img src={classes.avatar} alt="Avatar" />
         <div>
-          <strong>{classes.name}</strong>
+          <strong>
+            {classes.name}
+            {' '}
+            {classes.lastname}
+          </strong>
           <span>{classes.subject}</span>
         </div>
       </header>
@@ -38,6 +65,27 @@ const ListContent: React.FC<ListContentProps> = ({ classes }) => {
       <p>
         {classes.bio}
       </p>
+      <ScheduleContainer>
+
+        {scheduleData.map((item) => (
+          <ScheduleCard key={item.id}>
+            <ScheduleInfo>
+              <p>Dia</p>
+              <h1>{item.week_day}</h1>
+            </ScheduleInfo>
+            <ScheduleInfo>
+              <p>Horário</p>
+              <h1>
+                {item.from}
+                {' '}
+                -
+                {' '}
+                {item.to}
+              </h1>
+            </ScheduleInfo>
+          </ScheduleCard>
+        ))}
+      </ScheduleContainer>
 
       <footer>
         <p>

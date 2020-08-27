@@ -55,7 +55,7 @@ const CreateAccountPage: React.FC = () => {
         abortEarly: false,
       });
 
-      await api.post('users', data);
+      await api.post('create-user', data);
 
       setProgress(100);
       history.push('/success-user');

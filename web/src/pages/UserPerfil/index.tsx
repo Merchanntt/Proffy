@@ -1,7 +1,6 @@
 import React, {
-  useState, useCallback, FormEvent, ChangeEvent,
+  useState, useCallback, FormEvent, ChangeEvent, useEffect,
 } from 'react';
-import { useHistory } from 'react-router-dom';
 import { FiCamera } from 'react-icons/fi';
 import LoadingBar from 'react-top-loading-bar';
 
@@ -30,14 +29,21 @@ const UserPerfil: React.FC = () => {
   const [progress, setProgress] = useState(0);
 
   const [scheduleItem, setScheduleItem] = useState([
-    { week_day: 0, from: '', to: '' },
+    {
+      id: '', week_day: 0, from: '', to: '',
+    },
   ]);
 
-  const history = useHistory();
+  useEffect(() => {
+    api.get('/users/classes-schedule').then((response) => {
+      console.log(response.data);
+      setScheduleItem(response.data);
+    });
+  }, []);
 
   const handleNewScheduleItem = useCallback(() => {
     setScheduleItem([...scheduleItem, {
-      week_day: 0, from: '', to: '',
+      id: '', week_day: 0, from: '', to: '',
     }]);
   }, [scheduleItem]);
 
@@ -64,6 +70,12 @@ const UserPerfil: React.FC = () => {
     }
   }, [UpdateAvatar, progress]);
 
+  const handleDeleteSchedule = useCallback((id: string) => {
+    api.delete(`users/classes-schedule/${id}`);
+
+    setScheduleItem(scheduleItem.filter((item) => item.id !== id));
+  }, [scheduleItem]);
+
   const handleUpdateUser = useCallback((e: FormEvent) => {
     e.preventDefault();
 
@@ -78,6 +90,15 @@ const UserPerfil: React.FC = () => {
       }).then((response) => {
         UpdateAvatar(response.data);
       });
+
+      const schedule = scheduleItem.map((item) => ({
+        id: item.id,
+        week_day: item.week_day,
+        to: item.to,
+        from: item.from,
+      })).pop();
+
+      api.put('users/classes-schedule', schedule);
 
       window.scroll({ top: 0 });
       setProgress(100);
@@ -170,7 +191,7 @@ const UserPerfil: React.FC = () => {
             </legend>
             {scheduleItem.map((item, index) => (
 
-              <div key={item.week_day} className="schedule-item">
+              <div key={item.id} className="schedule-item">
                 <Select
                   label="Dias da semana"
                   name="week_day"
@@ -203,7 +224,7 @@ const UserPerfil: React.FC = () => {
                 />
                 <div className="step" />
 
-                <button type="submit">
+                <button type="button" onClick={() => handleDeleteSchedule(item.id)}>
                   Excluir Horário
                 </button>
               </div>
