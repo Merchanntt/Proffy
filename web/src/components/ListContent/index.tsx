@@ -7,6 +7,8 @@ import api from '../../services/api';
 import './styles.css';
 import { ScheduleContainer, ScheduleCard, ScheduleInfo } from './styled';
 
+const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+
 export interface Teacher {
   id: number;
   name: string;
@@ -20,7 +22,7 @@ export interface Teacher {
 
 interface ScheduleData {
   id: number;
-  week_day: number;
+  week_day: number | string;
   from: string;
   to: string;
 }
@@ -36,11 +38,12 @@ const ListContent: React.FC<ListContentProps> = ({ classes }) => {
     const { id } = classes;
 
     api.get<ScheduleData[]>(`users/classes-schedule/classes/${id}`).then((response) => {
-      setScheduleData(response.data);
+      const schedule = response.data.map((scheduleItem) => ({
+        ...scheduleItem, week_day: days[Number(scheduleItem.week_day)],
+      }));
+      setScheduleData(schedule);
     });
-  }, [classes]);
-
-  // const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+  }, [classes, days]);
 
   const handleNewConnection = useCallback(() => {
     api.post('connections', {

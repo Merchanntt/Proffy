@@ -4,7 +4,7 @@ import { BorderlessButton } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 
 import GoBackButton from '../../assets/images/icons/back.png'
-import LogoImage from '../../assets/images/logo.png'
+import LogoImage from '../../assets/images/Logo.png'
 
 import styles from './styles'
 

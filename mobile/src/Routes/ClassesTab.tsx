@@ -9,7 +9,7 @@ import FavoriteClassesPage from '../pages/FavoritesClasses'
 const { Navigator, Screen } = createBottomTabNavigator()
 
 const ClassesTabNavigation: React.FC = () => (
-  <Navigator tabBarOptions= {{
+  <Navigator  tabBarOptions= {{
     style: {
       elevation: 0,
       shadowOpacity: 0,
@@ -32,12 +32,12 @@ const ClassesTabNavigation: React.FC = () => (
     labelStyle: {
       fontFamily: 'Archivo_700Bold',
       fontSize: 13,
-      marginLeft: 16,
+      marginLeft: 16
     },
     inactiveBackgroundColor: '#fafafc',
     activeBackgroundColor: '#ebebf5',
     inactiveTintColor: '#c1bccc',
-    activeTintColor: '#32264d'
+    activeTintColor: '#32264d',
   }}>
     <Screen 
       name='ClassesListPage' 

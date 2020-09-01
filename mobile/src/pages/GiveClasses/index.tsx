@@ -8,7 +8,7 @@ import GiveClassesBackground from '../../assets/images/give-classes-background.p
 import styles from './styles';
 
 const GiveClasses: React.FC = () => {
-  const {goBack} = useNavigation()
+  const {navigate} = useNavigation()
 
   return (
     <View style={styles.container}>
@@ -18,7 +18,7 @@ const GiveClasses: React.FC = () => {
           Para começar, você precisa se cadastrar como professor na nossa plataforma web.
         </Text>
       </ImageBackground>
-      <RectButton onPress={() => goBack()} style={[styles.button]}>
+      <RectButton onPress={() => navigate('SuccessCreateClass')} style={[styles.button]}>
           <Text style={styles.buttonText}>Tudo bem</Text>
         </RectButton>
     </View>

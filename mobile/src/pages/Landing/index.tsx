@@ -1,7 +1,8 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { View, Image, Text } from 'react-native'
-import {RectButton} from 'react-native-gesture-handler'
+import {RectButton, BorderlessButton} from 'react-native-gesture-handler'
+import { UseAuth } from '../../hooks/auth'
 
 import api from '../../services/api'
 
@@ -14,6 +15,8 @@ import styles from './styles'
 
 const Landing: React.FC = () => {
   const [totalConnections, setTotalConnections] = useState(0)
+
+  const {signOut} = UseAuth()
 
   const {navigate} = useNavigation()
 
@@ -33,9 +36,16 @@ const Landing: React.FC = () => {
     navigate('ClassesList')
   }, [])
 
+  const handleLogOut = useCallback(() => {
+    signOut()
+  }, [])
+
   return (
     <View style={styles.container}>
       <Image source={LandingImageBase} style={styles.banner}/>
+      <BorderlessButton onPress={handleLogOut}>
+        <Text>Sair</Text>
+      </BorderlessButton>
 
       <Text style={styles.title}>
         Seja bem-vindo, {'\n'}

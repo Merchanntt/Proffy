@@ -39,7 +39,7 @@ const ClassesListPage: React.FC = () => {
   const handleSearchClassesList = useCallback(async () => {
     handleLoadFavoriteClassesFromStorage()
     try {
-      const response = await api.get('classes', {
+      const response = await api.get('users/classes', {
         params: {
           subject,
           week_day,
