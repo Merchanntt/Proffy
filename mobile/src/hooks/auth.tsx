@@ -1,9 +1,8 @@
 import React, { createContext, useCallback, useContext, useState, useEffect } from 'react'
 import api from '../services/api'
 import AsyncStorage from '@react-native-community/async-storage'
-import { useNavigation } from '@react-navigation/native'
 
-interface User {
+export interface User {
   id: number;
   name: string;
   lastname: string;

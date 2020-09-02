@@ -3,9 +3,50 @@ import { StyleSheet } from 'react-native'
  const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#8257e5',
+    backgroundColor: '#E5E5E5',
     justifyContent: "center",
-    padding: 30
+  },
+
+  topContent: {
+    marginTop: 15,
+    backgroundColor: '#8257e5',
+    padding: 30,
+  },
+
+  header: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+    marginBottom: 5
+  },
+
+  userInfo: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+
+  userName: {
+    fontFamily: 'Poppins_400Regular',
+    color: '#D4C2FF',
+    fontSize: 12,
+    lineHeight: 22,
+    marginLeft: 12,
+    maxWidth: 200
+  },
+
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20
+  },
+
+  buttonLogOff: {
+    backgroundColor: '#774DD6',
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   banner: {
@@ -13,12 +54,15 @@ import { StyleSheet } from 'react-native'
     resizeMode: 'contain'
   },
 
+  bottomContent: {
+    padding: 30
+  },
+
   title: {
     fontFamily: 'Poppins_400Regular',
-    color: '#fff',
+    color: '#6A6180',
     fontSize: 20,
     lineHeight: 30,
-    marginTop: 60
   }, 
 
   description: {
@@ -55,7 +99,7 @@ import { StyleSheet } from 'react-native'
 
   connections: {
     fontFamily: 'Poppins_400Regular',
-    color: '#d4acff',
+    color: '#9C98A6',
     fontSize: 12,
     lineHeight: 20,
     maxHeight: 140,

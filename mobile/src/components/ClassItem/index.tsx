@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { View, Image, Text, Linking } from 'react-native'
 import { RectButton } from 'react-native-gesture-handler'
-import { FontAwesome5 } from '@expo/vector-icons'
+import { FontAwesome5, Feather } from '@expo/vector-icons'
 
 import HeartOutline from '../../assets/images/icons/heart-outline.png'
 import DissmisFavorite from '../../assets/images/icons/unfavorite.png'
@@ -25,8 +25,31 @@ interface ClassTeacherProps {
   favorite: boolean;
 }
 
+interface ScheduleData {
+  id: number;
+  week_day: string;
+  to: string;
+  from: string;
+}
+
+const day = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
+
 const ClassItem: React.FC<ClassTeacherProps> = ({classTeacher, favorite}) => {
   const [isFavorite, setIsFavorite] = useState(favorite)
+  const [schedule, setSchedule] = useState<ScheduleData[]>([])
+
+  useEffect(() => {
+    api.get(`users/classes-schedule/classes/${classTeacher.id}`).then(response => {
+      const formatedSchedule = response.data.map((item: ScheduleData) => ({
+        id: item.id, 
+        week_day: day[Number(item.week_day)],
+        from: item.from.split(':')[0],
+        to: item.to.split(':')[0]
+      }))
+
+      setSchedule(formatedSchedule)
+    })
+  }, [])
 
   const handleSendAnWhatsAppMessage = useCallback(() => {
     api.post('connections', {
@@ -74,15 +97,41 @@ const ClassItem: React.FC<ClassTeacherProps> = ({classTeacher, favorite}) => {
           </View>
       </View>
 
-      <Text style={styles.description}>
-        {classTeacher.bio}
-      </Text>
+      <View style={{borderBottomWidth: 1, borderColor: '#E6E6F0'}}>
+        <Text style={styles.description}>
+          {classTeacher.bio}
+        </Text>
+      </View>
+
+      <View style={styles.schedule}>
+
+          <View style={styles.scheduleLabelContainer}>
+            <Text style={styles.scheduleLabel}>Dia</Text>
+            <Text style={styles.scheduleLabel}>Horário</Text>
+          </View>
+
+          {schedule.map(item => (
+            <View style={styles.scheduleInfo} key={item.id}>
+            <Text style={styles.scheduleDayText}>{item.week_day}</Text>
+            <View style={styles.scheduleArrowContainer}>
+              <View style={styles.scheduleArrow}/>
+              <Feather 
+                name='chevron-right' 
+                color='#E6E6F0' size={20} 
+                style={{marginLeft: -8, marginTop: 1}}/>
+            </View>
+            <Text style={styles.scheduleText}>{item.from}h - {item.to}h</Text>
+          </View>
+          ))}
+      </View>
 
       <View style={styles.footer}>
-        <Text style={styles.price}>
-          Preço/Hora {'   '}
-        <Text style={styles.priceValue}>R$ {classTeacher.cost}</Text>
-        </Text>
+
+        <View style={styles.priceContainer}>
+          <Text style={styles.price}>Preço da minha hora:</Text>
+          <Text style={styles.priceValue}>R$ {classTeacher.cost} reais</Text>
+        </View>
+
         <View style={styles.buttonsContainer}>
           <RectButton 
             style={[

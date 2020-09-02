@@ -30,7 +30,7 @@ const FavoriteClassesPage: React.FC = () => {
 
  return (
   <View style={styles.container} >
-     <Header title='Meus proffys favoritos' />
+     <Header title='Meus proffys favoritos' counterName='Favoritos'/>
      <ScrollView 
       style={styles.itemlist}
       contentContainerStyle={{

@@ -42,7 +42,7 @@ const LogIn: React.FC = () => {
     } else {
       setHasText(false)
     }
-  }, [hasText, password])
+  }, [password])
 
   const handleLogIn = useCallback(async () => {
     try {

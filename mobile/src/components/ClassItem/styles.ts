@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import AuthRoutes from "../../Routes/auth.route.Stack";
 
 const styles = StyleSheet.create({
   container: {
@@ -46,19 +47,78 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     color: '#6a6180',
+    marginBottom: 24
+  },
+
+  schedule: {
+    padding: 20,
+  },
+
+  scheduleLabelContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 20,
+    marginBottom: 10
+  },
+
+  scheduleLabel: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 10,
+    color: '#9C98A6',
+  },
+
+  scheduleInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 10,
+    height: 40,
+    backgroundColor: '#FAFAFC',
+    borderWidth: 1,
+    borderColor: '#E6E6F0',
+    borderRadius: 8,
+    marginBottom: 8
+  },
+
+  scheduleText: {
+    fontFamily: 'Archivo_700Bold',
+    fontSize: 14,
+    color: '#6A6180',
+  },
+
+  scheduleDayText: {
+    fontFamily: 'Archivo_700Bold',
+    fontSize: 14,
+    color: '#6A6180',
+    width: 60
+  },
+
+  scheduleArrowContainer: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+
+  scheduleArrow: {
+    height: 2,
+    width: 40,
+    backgroundColor: '#E6E6F0'
   },
 
   footer: {
     backgroundColor: '#fafafc',
     padding: 24,
-    alignItems: 'center',
-    marginTop: 24
+  },
+
+  priceContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",    
   },
 
   price: {
     fontFamily: 'Poppins_400Regular',
     color: '#6a6180',
-    fontSize: 14
+    fontSize: 14,
   },
 
   priceValue: {

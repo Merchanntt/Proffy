@@ -2,6 +2,7 @@ import React, { useCallback, ReactNode } from 'react'
 import { View, Image, Text } from 'react-native'
 import { BorderlessButton } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
+import * as Animatable from 'react-native-animatable'
 
 import GoBackButton from '../../assets/images/icons/back.png'
 import LogoImage from '../../assets/images/Logo.png'
@@ -11,9 +12,11 @@ import styles from './styles'
 interface HeaderProps {
   title: string;
   headerRight?: ReactNode;
+  total?: number;
+  counterName?: string; 
 }
 
-const Header: React.FC<HeaderProps> = ({ title, headerRight, children }) => {
+const Header: React.FC<HeaderProps> = ({ title, headerRight, total = 0, counterName, children }) => {
   const {navigate} = useNavigation()
 
   const handleGoBackButton = useCallback(() => {
@@ -26,14 +29,19 @@ const Header: React.FC<HeaderProps> = ({ title, headerRight, children }) => {
        <BorderlessButton onPress={handleGoBackButton}>
          <Image source={GoBackButton} resizeMode='contain'/>
        </BorderlessButton>
-
-       <Image source={LogoImage} resizeMode='contain'/>
+        <Text style={styles.pageName}>Estudar</Text>
+       <Image source={LogoImage} resizeMode='contain' style={{width: 32}}/>
      </View>
-      <View style={styles.topBar}>
-        <Text style={styles.title}>{title}</Text>
-        {headerRight}
+      <View style={styles.rest}>
+        <View style={styles.topBar}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.counter}>{total}{' '}{counterName}</Text>
+          </View>
+          {headerRight}
+        </View>
+          {children}
       </View>
-      {children}
    </View>
  ) 
 }

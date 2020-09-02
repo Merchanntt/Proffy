@@ -7,7 +7,8 @@ const styles = StyleSheet.create({
   },
 
   searchForm: {
-    marginBottom: 8
+    marginBottom: 8,
+    marginTop: -20
   },
 
   label: {
@@ -53,6 +54,31 @@ const styles = StyleSheet.create({
   itemlist : {
     marginTop: -40
   },
+
+  
+  filterButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: "center",
+    width: 310,
+    height: 50,
+    marginBottom: 20
+  },
+
+  border: {
+    height: 1,
+    width: 310,
+    backgroundColor: '#9871F5',
+    position: 'absolute',
+    bottom: -10
+  },
+
+  filterText: {
+    fontFamily: 'Archivo_400Regular',
+    color: '#D4C2FF',
+    fontSize: 16,
+    marginLeft: 20
+  }
 })
 
 export default styles;

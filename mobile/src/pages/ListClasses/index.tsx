@@ -3,6 +3,7 @@ import { View, Text, Alert } from 'react-native'
 import { ScrollView, TextInput, BorderlessButton, RectButton } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-community/async-storage'
+import * as Animatable  from 'react-native-animatable'
 
 import Header from '../../components/Header'
 import ClassItem, { TeacherInfoData } from '../../components/ClassItem'
@@ -15,6 +16,8 @@ const ClassesListPage: React.FC = () => {
   const [subject, setSubject] = useState('')
   const [week_day, setWeekDay] = useState('')
   const [time, setTime] = useState('')
+
+  const [total, setTotal] = useState(0)
 
   const [classesList, setClassesList] = useState([])
   const [favorites, setFavorites] = useState<number[]>([])
@@ -34,6 +37,7 @@ const ClassesListPage: React.FC = () => {
 
   const handleOpenSearchForm = useCallback(() => {
     setIsVisible(!isVisible)
+    Animatable.createAnimation
   }, [isVisible])
 
   const handleSearchClassesList = useCallback(async () => {
@@ -54,18 +58,39 @@ const ClassesListPage: React.FC = () => {
     }
   }, [subject, week_day, time, isVisible])
 
+  useEffect(() => {
+    api.get('users/classes/total').then(response => {
+      const { total } = response.data;
+      setTotal(total)
+    })
+  }, [])
+
  return (
    <View style={styles.container} >
      <Header 
       title='Proffys disponíveis'
+      total={total}
+      counterName= 'Proffys'
       headerRight={(
-        <BorderlessButton onPress={handleOpenSearchForm}>
-          <Feather name='filter' size={20} color='#fff'/>
+        <View style={{position: 'relative'}}>
+        <BorderlessButton style={styles.filterButton} onPress={handleOpenSearchForm}>
+          <View style={{flexDirection: "row", alignItems: "center"}}>
+            <Feather name='filter' size={20} color='#04D361'/>
+            <Text style={styles.filterText}>Filtrar por dia, hora e matéria</Text>
+            <View style={styles.border}/>
+          </View>
+          <Feather name={isVisible ? 'chevron-up' : 'chevron-down'} size={16} color='#A380F6'/>
         </BorderlessButton>
+      </View>
       )}
      >
       {isVisible && (
-        <View style={styles.searchForm}> 
+        <Animatable.View 
+          style={styles.searchForm}
+          animation={isVisible ? 'zoomIn' : 'zoomOut'}
+          useNativeDriver
+          duration={500}
+        > 
           <Text style={styles.label}>Matérias</Text>
             <TextInput 
               style={styles.input}
@@ -101,7 +126,7 @@ const ClassesListPage: React.FC = () => {
           <RectButton style={styles.button} onPress={handleSearchClassesList}>
             <Text style={styles.buttonText}>Encontrar proffy!</Text>
           </RectButton>
-        </View>
+        </Animatable.View>
       )}  
      </Header>
 

@@ -2,20 +2,42 @@ import {StyleSheet} from 'react-native'
 
 const styles = StyleSheet.create({
   container : {
-    padding: 30,
     backgroundColor: '#8257e5'
   },
 
   content: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#774DD6',
+    padding: 30,
+    height: 80,
+    borderBottomWidth: 1,
+    borderBottomColor: '#6842C2'
   },
 
   topBar: {
-    flexDirection: 'row',
-    alignItems: "center",
-    justifyContent: 'space-between'
+    alignItems: "flex-start",
+    justifyContent: 'center',
+    marginTop: -40,
+    marginBottom: 10
+  },
+
+  pageName: {
+    fontFamily: 'Archivo_400Regular',
+    color: '#D4C2FF',
+    fontSize: 14,
+  },
+
+  rest: {
+    padding: 30,
+  },
+
+  titleContainer: {
+    flexDirection: 'row', 
+    alignItems: "center", 
+    justifyContent: 'space-between',
+    width: 320
   },
 
   title: {
@@ -25,6 +47,12 @@ const styles = StyleSheet.create({
     lineHeight: 32,
     maxWidth: 160,
     marginVertical: 40,
+  },
+
+  counter: {
+    fontFamily: 'Poppins_400Regular',
+    color: '#D4C2FF',
+    fontSize: 12,
   }
 })
 
