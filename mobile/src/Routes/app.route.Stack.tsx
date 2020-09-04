@@ -4,7 +4,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Landing from '../pages/Landing';
 
-import GiveClasses from '../pages/GiveClasses';
+import Profile from '../pages/Profile';
+
+import GiveClasses from '../pages/CreateClasses';
 import SuccessCreateClass from '../pages/SuccessPages/CreateClass';
 
 import ClassesTabNavigation from './ClassesTab';
@@ -16,6 +18,8 @@ const AppRoutes: React.FC = () => (
     <Navigator screenOptions={{ headerShown: false}}>
 
       <Screen name='Landing' component={Landing}/>
+
+      <Screen name='Profile' component={Profile}/>
 
       <Screen name='GiveClasses' component={GiveClasses}/>
       <Screen name='SuccessCreateClass' component={SuccessCreateClass}/>

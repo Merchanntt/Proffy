@@ -16,16 +16,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular'
   },
 
-  input: {
-    height: 54,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-    marginTop: 4,
-    marginBottom: 16
-  },
-
   inputGroup: {
     flexDirection: 'row',
     justifyContent: 'space-between'

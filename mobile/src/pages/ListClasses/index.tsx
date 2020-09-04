@@ -1,18 +1,22 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, Text, Alert } from 'react-native'
-import { ScrollView, TextInput, BorderlessButton, RectButton } from 'react-native-gesture-handler'
+import { View, Text, Alert, LayoutAnimation, Animated} from 'react-native'
+import { ScrollView, BorderlessButton, RectButton } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-community/async-storage'
-import * as Animatable  from 'react-native-animatable'
+import * as Animatable from 'react-native-animatable'
+import DatePicker from '@react-native-community/datetimepicker'
 
 import Header from '../../components/Header'
-import ClassItem, { TeacherInfoData } from '../../components/ClassItem'
+import ClassItem, { TeacherInfoData, day } from '../../components/ClassItem'
+import Picker from '../../components/Picker'
+import {subjects, date} from '../../utils/PickerArrays'
 
 import styles from './styles'
 import api from '../../services/api'
 
 const ClassesListPage: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true)
+
   const [subject, setSubject] = useState('')
   const [week_day, setWeekDay] = useState('')
   const [time, setTime] = useState('')
@@ -36,8 +40,9 @@ const ClassesListPage: React.FC = () => {
   }, [])
 
   const handleOpenSearchForm = useCallback(() => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+
     setIsVisible(!isVisible)
-    Animatable.createAnimation
   }, [isVisible])
 
   const handleSearchClassesList = useCallback(async () => {
@@ -52,11 +57,12 @@ const ClassesListPage: React.FC = () => {
       })
 
       setClassesList(response.data)
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
       setIsVisible(false)
     } catch(err) {
       return Alert.alert('Desculpe!!', 'Mas não encontramos nenhum proffy para você. Tente Novamente')
     }
-  }, [subject, week_day, time, isVisible])
+  }, [subject, week_day, time])
 
   useEffect(() => {
     api.get('users/classes/total').then(response => {
@@ -69,6 +75,7 @@ const ClassesListPage: React.FC = () => {
    <View style={styles.container} >
      <Header 
       title='Proffys disponíveis'
+      pageStatus='Estudar'
       total={total}
       counterName= 'Proffys'
       headerRight={(
@@ -87,45 +94,57 @@ const ClassesListPage: React.FC = () => {
       {isVisible && (
         <Animatable.View 
           style={styles.searchForm}
-          animation={isVisible ? 'zoomIn' : 'zoomOut'}
+          animation='zoomIn'
           useNativeDriver
-          duration={500}
+          duration={300}
         > 
           <Text style={styles.label}>Matérias</Text>
-            <TextInput 
-              style={styles.input}
-              placeholder='Qual a matéria?'
+            <Picker 
+              title='Qual a matéria?'
               value={subject}
-              onChangeText={text => setSubject(text)}
-              placeholderTextColor= '#c1bccc'
+              onValueChange={text => setSubject(text)}
+              items={
+                subjects.map(({value}) => {
+                  return { label: `${value}`, value: `${value}`}
+                })
+              }
             />
 
             <View style={styles.inputGroup}>
               <View style={styles.inputBlock}>
-              <Text style={styles.label}>Dia da semana</Text>
-            <TextInput 
-              style={styles.input}
-              placeholder='Qual dia?'
-              value={week_day}
-              onChangeText={text => setWeekDay(text)}
-              placeholderTextColor= '#c1bccc'
-            />
+                <Text style={styles.label}>Dia da semana</Text>
+                  <Picker 
+                    title='Qual o dia?'
+                    value={week_day}
+                    onValueChange={text => setWeekDay(text)}
+                    items={
+                      day.map((days, index) => {
+                        return { label: `${days}`, value: `${index}`}
+                      })
+                    }
+                  />
               </View>
+              
 
-            <View style={styles.inputBlock}>
-              <Text style={styles.label}>Horário</Text>
-            <TextInput 
-              style={styles.input}
-              placeholder='Qual horário?'
-              value={time}
-              onChangeText={text => setTime(text)}
-              placeholderTextColor= '#c1bccc'
-            />
-            </View>
+              <View style={styles.inputBlock}>
+                <Text style={styles.label}>Horário</Text>
+                <Picker 
+                    title='Qual horário?'
+                    value={time}
+                    onValueChange={text => setTime(text)}
+                    items={
+                      date.map(({value}) => {
+                        return { label: `${value}`, value: `${value}`}
+                      })
+                    }
+                  />
+              </View>
           </View>
+
           <RectButton style={styles.button} onPress={handleSearchClassesList}>
             <Text style={styles.buttonText}>Encontrar proffy!</Text>
           </RectButton>
+
         </Animatable.View>
       )}  
      </Header>

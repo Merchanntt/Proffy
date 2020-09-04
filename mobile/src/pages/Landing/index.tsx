@@ -32,6 +32,11 @@ const Landing: React.FC = () => {
     })
   }, [])
 
+  
+  const handleNavigateToProfile = useCallback(() => {
+    navigate('Profile')
+  }, [])
+
   const handleNavigateToGiveClassPage = useCallback(() => {
     navigate('GiveClasses')
   }, [])
@@ -49,7 +54,7 @@ const Landing: React.FC = () => {
       <View style={styles.topContent}>
         <View style={styles.header}>
           <View style={styles.userInfo}>
-            <BorderlessButton>
+            <BorderlessButton onPress={handleNavigateToProfile}>
               <Image 
                 source={{uri: user.avatar }} 
                 style={styles.avatar}

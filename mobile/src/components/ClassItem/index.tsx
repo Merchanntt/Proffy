@@ -32,7 +32,7 @@ interface ScheduleData {
   from: string;
 }
 
-const day = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
+export const day = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
 
 const ClassItem: React.FC<ClassTeacherProps> = ({classTeacher, favorite}) => {
   const [isFavorite, setIsFavorite] = useState(favorite)
