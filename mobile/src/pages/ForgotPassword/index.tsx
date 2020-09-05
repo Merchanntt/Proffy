@@ -55,10 +55,12 @@ const LogIn: React.FC = () => {
       navigate('SuccessSendMail')
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
+        setLoading(false)
         Alert.alert(error.message)
 
         return
       }
+      setLoading(false)
       Alert.alert('Ops! Algo deu errado', 'Ocorreu um problema ao enviar seu email. Tente Novamente')
     }
   }, [email])

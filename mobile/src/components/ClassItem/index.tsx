@@ -1,10 +1,11 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useRef } from 'react'
 import { View, Image, Text, Linking } from 'react-native'
 import { RectButton } from 'react-native-gesture-handler'
 import { FontAwesome5, Feather } from '@expo/vector-icons'
 
 import HeartOutline from '../../assets/images/icons/heart-outline.png'
 import DissmisFavorite from '../../assets/images/icons/unfavorite.png'
+import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
 
 import styles from './styles'
 import AsyncStorage from '@react-native-community/async-storage'
@@ -89,7 +90,7 @@ const ClassItem: React.FC<ClassTeacherProps> = ({classTeacher, favorite}) => {
       <View style={styles.profile}>
         <Image 
           style={styles.avatar} 
-          source={{ uri: classTeacher.avatar}}
+          source={classTeacher.avatar === null ? DefaultProfile : { uri: classTeacher.avatar}}
         />
           <View style={styles.PerfilInfo}>
             <Text style={styles.name}>{classTeacher.name}</Text>

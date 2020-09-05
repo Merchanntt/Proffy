@@ -12,6 +12,7 @@ import LandingImageBase from '../../assets/images/landing.png'
 import StudyIcon from '../../assets/images/icons/study.png'
 import ClassesIcon from '../../assets/images/icons/give-classes.png'
 import Heart from '../../assets/images/icons/heart.png'
+import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
 
 const ButtonAnimated = Animatable.createAnimatableComponent(RectButton)
 
@@ -56,7 +57,7 @@ const Landing: React.FC = () => {
           <View style={styles.userInfo}>
             <BorderlessButton onPress={handleNavigateToProfile}>
               <Image 
-                source={{uri: user.avatar }} 
+                source={user.avatar === null ? DefaultProfile : {uri: user.avatar }} 
                 style={styles.avatar}
               />
             </BorderlessButton>

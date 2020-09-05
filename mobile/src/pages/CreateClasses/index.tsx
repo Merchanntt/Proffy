@@ -1,6 +1,8 @@
 import React, {useState, useCallback} from 'react';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, View, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons'
+import * as Yup from 'yup'
 
 import Header from '../../components/Header';
 import Input from '../../components/Input';
@@ -10,6 +12,9 @@ import Button from '../../components/Button';
 import { UseAuth } from '../../hooks/auth';
 import { day } from '../../components/ClassItem'
 import {date, subjects} from '../../utils/PickerArrays'
+import api from '../../services/api';
+
+import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
 
 
 import { 
@@ -39,9 +44,10 @@ import {
 
 const CreateClasses: React.FC = () => {
   const { user } = UseAuth()
+  const { navigate } = useNavigation()
 
-  const [whatsapp, setWhatsapp] = useState(user.whatsapp)
-  const [bio, setBio] = useState(user.bio)
+  const [whatsapp, setWhatsapp] = useState('')
+  const [bio, setBio] = useState('')
 
   const [subject, setSubject] = useState('')
   const [cost, setCost] = useState('')
@@ -49,8 +55,6 @@ const CreateClasses: React.FC = () => {
   const [scheduleItem, setScheduleItem] = useState([
     {id: '', week_day: 1, from: '', to: ''},
   ])
-
-  console.log(scheduleItem)
 
   const handleNewSchedule = useCallback(() => {
     setScheduleItem([
@@ -68,6 +72,53 @@ const CreateClasses: React.FC = () => {
 
     setScheduleItem(updateSchedule)
   }, [scheduleItem])
+
+  const handleCreateClasses = useCallback(async() => {
+    try {
+      const schema = Yup.object().shape({
+        whatsapp: Yup.string()
+          .required('WhatsApp é obrigatório')
+          .min(10,'Digite um número válido')
+          .max(11, 'Digite um número válido'),
+        bio: Yup.string().required('Biografía é obrigatória').max(300, 'Limíte de caracteres excêdido'),
+        subject: Yup.string().required('Escolha uma matéria'),
+        cost: Yup.string().required('Escolha uma valor para a sua aula').max(5),
+        schedule: Yup.array(Yup.object().shape({
+            week_day: Yup.number().required('Escolha um dia da semana'),
+            from: Yup.string().required('Escolha o horário de início da aula'),
+            to: Yup.string().required('Escolha o horário de termino da aula'),
+        }))
+      })
+
+      const data = {
+        whatsapp,
+        bio,
+        subject,
+        cost,
+        schedule: scheduleItem,
+      }
+
+      await schema.validate(data)
+
+      await api.post('users/classes', data)
+
+      navigate('SuccessCreateClass')
+
+    } catch (error) {
+      if(error instanceof Yup.ValidationError) {
+        Alert.alert(error.message)
+        return
+      }
+        Alert.alert('Ops! Algo deu errado.', 'Houve um problema com o seu cadastro. Tente novamente')
+    }
+  }, [
+      whatsapp,
+      bio,
+      subject,
+      cost,
+      scheduleItem,
+      navigate
+  ])
 
   return (
     <Container>
@@ -97,12 +148,13 @@ const CreateClasses: React.FC = () => {
 
             </SessionTitleContainer>
               <InfoContainer>
-                <Avatar source={{uri: user.avatar}}/>
+                <Avatar source={user.avatar === null ? DefaultProfile : {uri: user.avatar}}/>
                 <UserName>{user.name}{' '}{user.lastname}</UserName>
               </InfoContainer>
               <Input 
                 label='WhatsApp'
                 value={whatsapp}
+                keyboardType='phone-pad'
                 onChangeText={(e) => setWhatsapp(e)}
                 DivStyle={{
                   marginTop: 20,
@@ -147,6 +199,7 @@ const CreateClasses: React.FC = () => {
                 keyboardType='decimal-pad'
                 returnKeyType='default'
                 onChangeText={(e) => setCost(e)}
+                maxLength={6}
                 DivStyle={{
                   marginTop: 20,
                 }}
@@ -222,6 +275,7 @@ const CreateClasses: React.FC = () => {
           <Footer>
             <Button 
               text='Salvar cadastro'
+              onPress={handleCreateClasses}
               />
             <WarningContainer>
               <Feather name='alert-octagon' color='#8257e5' size={32}/>

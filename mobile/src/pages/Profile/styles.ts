@@ -22,6 +22,7 @@ export const  Avatar = styled.Image`
   height: 140px;
   width: 140px;
   border-radius: 70px;
+  background-color: #774DD6;
 `;
 
 export const  SendPhotoButton = styled(RectButton)`

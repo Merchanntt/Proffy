@@ -1,6 +1,9 @@
-import React, {useState, useCallback} from 'react';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
+import React, {useState, useCallback, useEffect} from 'react';
+import { KeyboardAvoidingView, Platform, View, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons'
+import * as Yup from 'yup'
+import * as ImagePicker from 'expo-image-picker'
+import * as Permissions from 'expo-permissions'
 
 import Header from '../../components/Header';
 import Input from '../../components/Input';
@@ -10,8 +13,10 @@ import Button from '../../components/Button';
 import { UseAuth } from '../../hooks/auth';
 import { day } from '../../components/ClassItem'
 import {date} from '../../utils/PickerArrays'
+import api from '../../services/api';
 
 import BackgroundImage from '../../assets/images/HeaderBackground.png'
+import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
 
 import { 
     Container, 
@@ -36,7 +41,7 @@ import {
   } from './styles';
 
 const Profile: React.FC = () => {
-  const { user } = UseAuth()
+  const { user, updateUser } = UseAuth()
 
   const [name, setName] = useState(user.name)
   const [lastname, setLastName] = useState(user.lastname)
@@ -48,7 +53,13 @@ const Profile: React.FC = () => {
     {id: '', week_day: 1, from: '', to: ''},
   ])
 
-  console.log(scheduleItem)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    api.get('/users/classes-schedule').then(response => {
+      setScheduleItem(response.data)
+    })
+  }, [])
 
   const handleNewSchedule = useCallback(() => {
     setScheduleItem([
@@ -67,6 +78,117 @@ const Profile: React.FC = () => {
     setScheduleItem(updateSchedule)
   }, [scheduleItem])
 
+  const handleDeleteSchedule = useCallback((id: string | number) => {
+    if(scheduleItem.length === 1) {
+      return
+    }
+
+    api.delete(`users/classes-schedule/${id}`)
+
+    setScheduleItem(scheduleItem.filter(item => item.id !== id))
+  }, [scheduleItem])
+
+  const handleUpdatePhoto = useCallback(async() => {
+    if(Platform.OS !== 'web') {
+      const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        Alert.alert('Desculpe! Mas precisamos da sua permissão para fazer isso funcionar...')
+        return
+      }
+    }
+
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+      })
+
+      if (!result.cancelled) {
+        const data = new FormData()
+
+        data.append('avatar', {
+          type: 'image/jpeg',
+          name: `${user.name}/jpeg`,
+          uri: result.uri
+        })
+
+        await api.patch('/users/avatar', data).then(response => {
+          updateUser(response.data)
+        })
+      }
+
+    } catch (error) {
+      Alert.alert('Ops! Algo deu errado', 'Ocorreu um erro ao atualizar seu avatar. Tente novamente')
+    }
+
+  }, [updateUser, user.name])
+
+  const handleUpdateUser = useCallback(async() => {
+    try {
+      setLoading(true)
+
+      const schema = Yup.object().shape({
+        name: Yup.string().required('Nome é obrigatória'),
+        lastname: Yup.string().required('Sobrenome é obrigatória'),
+        email: Yup.string().required('Email é obrigatória').email('Digite um e-mail válido'),
+        whatsapp: Yup.string()
+          .required('WhatsApp é obrigatório')
+          .min(10,'Digite um número válido')
+          .max(11, 'Digite um número válido'),
+        bio: Yup.string().required('Biografía é obrigatória').max(300, 'Limíte de caracteres excêdido'),
+      })
+
+      const scheduleSchema = Yup.array(Yup.object().shape({
+        week_day: Yup.number().required('Escolha um dia da semana'),
+        from: Yup.string().required('Escolha o horário de início da aula'),
+        to: Yup.string().required('Escolha o horário de termino da aula'),
+    }))
+
+      const data = {
+        name,
+        lastname,
+        email,
+        whatsapp,
+        bio,
+        schedule: scheduleItem,
+      }
+
+      await schema.validate(data)
+      await scheduleSchema.validate(scheduleItem)
+
+      const response = await api.put('users/profile', data)
+      updateUser(response.data)
+
+      const scheduleItems = scheduleItem.map(({id, week_day, from, to}) => ({
+        id,
+        week_day: Number(week_day),
+        from,
+        to
+      })).pop()
+
+      await api.put('users/classes-schedule', scheduleItems)
+      
+      setLoading(false)
+
+      Alert.alert('Seu Perfil foi atualizado!')
+    } catch (error) {
+      if(error instanceof Yup.ValidationError) {
+        Alert.alert(error.message)
+        setLoading(false)
+        return
+      }
+        setLoading(false)
+        Alert.alert('Ops! Algo deu errado.', 'Houve um problema com ao atualizar seu perfil. Tente novamente')
+    }
+  }, [
+      name,
+      lastname,
+      email,
+      whatsapp,
+      bio,
+      scheduleItem,
+  ])
+
   return (
     <Container>
        <KeyboardAvoidingView 
@@ -79,8 +201,8 @@ const Profile: React.FC = () => {
       >
         <InfoContainer source={BackgroundImage} resizeMode='center'>
           <ImageContainer>
-            <Avatar source={{uri: user.avatar}}/>
-            <SendPhotoButton>
+            <Avatar source={user.avatar === null ? DefaultProfile : {uri: user.avatar}}/>
+            <SendPhotoButton onPress={handleUpdatePhoto}>
               <Feather name='camera' size={20} color='#fff'/>
             </SendPhotoButton>
           </ImageContainer>
@@ -88,6 +210,7 @@ const Profile: React.FC = () => {
         </InfoContainer>
       </Header>
         <MainForm 
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingHorizontal: 16,
             paddingBottom: 8
@@ -133,6 +256,8 @@ const Profile: React.FC = () => {
               <Input 
                 label='WhatsApp'
                 value={whatsapp}
+                keyboardType='phone-pad'
+                maxLength={11}
                 onChangeText={(e) => setWhatsapp(e)}
                 DivStyle={{
                   marginTop: 20,
@@ -184,8 +309,8 @@ const Profile: React.FC = () => {
                       viewContainer: {backgroundColor: '#FAFAFC', width: '100%'}
                     }}
                     title='Das'
-                    value={item.to}
-                    onValueChange={(text) => handleUpdateSchedule(index, 'to', text)}
+                    value={item.from}
+                    onValueChange={(text) => handleUpdateSchedule(index, 'from', text)}
                     items={
                       date.map(({value}) => {
                         return { label: `${value}`, value: `${value}` }
@@ -199,8 +324,8 @@ const Profile: React.FC = () => {
                     viewContainer: {backgroundColor: '#FAFAFC', width: '100%'}
                   }}
                   title='Até'
-                  value={item.from}
-                  onValueChange={(text) => handleUpdateSchedule(index, 'from', text)}
+                  value={item.to}
+                  onValueChange={(text) => handleUpdateSchedule(index, 'to', text)}
                   items={
                     date.map(({value}) => {
                       return { label: `${value}`, value: `${value}` }
@@ -210,7 +335,7 @@ const Profile: React.FC = () => {
               </PickerTimeContainer>
               </PickerGroupContainer>
               <Step />
-              <DeleteButton>
+              <DeleteButton onPress={() => handleDeleteSchedule(item.id)}>
                 <DeleteButtonText>Excluir horário</DeleteButtonText>
               </DeleteButton>
               </View>
@@ -219,6 +344,8 @@ const Profile: React.FC = () => {
           <Footer>
             <Button 
               text='Salvar alterações'
+              loading={loading}
+              onPress={handleUpdateUser}
               />
           </Footer>
           </Session>

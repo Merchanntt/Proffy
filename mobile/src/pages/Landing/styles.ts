@@ -37,7 +37,8 @@ import { StyleSheet } from 'react-native'
   avatar: {
     width: 40,
     height: 40,
-    borderRadius: 20
+    borderRadius: 20,
+    backgroundColor: '#774DD6',
   },
 
   buttonLogOff: {

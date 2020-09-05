@@ -69,11 +69,12 @@ const CreateAccountCredentials: React.FC = () => {
       navigate('SuccessCreateUser')
     } catch (error) {
       if(error instanceof Yup.ValidationError) {
+        setLoading(false)
         Alert.alert(error.message)
 
         return
       }
-
+      setLoading(false)
       Alert.alert('Ops! Algo deu errado.', 'Ocorreu um problema com o seu cadastro. Tente novamente ')
     }
   }, [navigate, email, password, routeParams])

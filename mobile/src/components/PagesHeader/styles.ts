@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components/native'
+import styled from 'styled-components/native'
 
 interface BackgroundProps {
   color?: string;
@@ -16,6 +16,7 @@ export const Container = styled.View<BackgroundProps>`
 export const ImageContainer = styled.View`
   width: 400px;
   align-items: center;
+  overflow: hidden;
 `
 
 export const ImageBackground = styled.ImageBackground`
