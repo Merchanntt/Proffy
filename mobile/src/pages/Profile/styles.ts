@@ -8,15 +8,12 @@ export const Container = styled.View`
 `;
 
 export const InfoContainer = styled.ImageBackground`
-  max-height: 200px;
   justify-content: center;
   align-items: center;
-  margin-top: -30px;
-`;
-
-export const  ImageContainer = styled.View`
+  margin-top: -50px;
   position: relative;
 `;
+
 
 export const  Avatar = styled.Image`
   height: 140px;
@@ -45,7 +42,6 @@ export const  UserName = styled.Text`
   line-height: 25px;
   text-align: center;
   margin-top: 24px;
-  margin-bottom: 70px;
 `;
 
 export const MainForm = styled.ScrollView`

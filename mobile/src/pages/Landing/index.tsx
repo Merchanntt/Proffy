@@ -54,14 +54,14 @@ const Landing: React.FC = () => {
     <View style={styles.container}>
       <View style={styles.topContent}>
         <View style={styles.header}>
-          <View style={styles.userInfo}>
-            <BorderlessButton onPress={handleNavigateToProfile}>
+          <View>
+            <BorderlessButton onPress={handleNavigateToProfile} style={styles.profileButton}>
               <Image 
                 source={user.avatar === null ? DefaultProfile : {uri: user.avatar }} 
                 style={styles.avatar}
               />
-            </BorderlessButton>
             <Text style={styles.userName}>{user.name}{' '}{user.lastname}</Text>
+            </BorderlessButton>
           </View>
           <RectButton onPress={handleLogOut} style={styles.buttonLogOff}>
             <Feather name='power' size={15} color='#D4C2FF'/>

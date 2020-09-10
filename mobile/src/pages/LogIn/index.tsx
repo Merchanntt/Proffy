@@ -36,13 +36,15 @@ const LogIn: React.FC = () => {
   const { signIn } = UseAuth();
   const { navigate } = useNavigation()
 
-  useEffect(() => {
-    if(password.length >= 6) {
-      setHasText(true)
-    } else {
-      setHasText(false)
-    }
-  }, [password])
+  const handleHasText = useCallback((data: string) => {
+      if(data.length >= 6) {
+        setHasText(true)
+      } else {
+        setHasText(false)
+      }
+
+      setPassword(data)
+  }, [])
 
   const handleLogIn = useCallback(async () => {
     try {
@@ -58,13 +60,13 @@ const LogIn: React.FC = () => {
         abortEarly: false,
       })
 
+      setLoading(false)
       await signIn({
         email: data.email,
         password: data.password,
         remember: toggleCheckBox,
       })
 
-      setLoading(false)
     } catch (error) {
       if(error instanceof Yup.ValidationError) {
         Alert.alert(error.message)
@@ -115,7 +117,7 @@ const LogIn: React.FC = () => {
           <Input 
             label='Senha' 
             autoCapitalize="none"
-            onChangeText={(e) => setPassword(e)}
+            onChangeText={(e) => handleHasText(e)}
             value={password}
             icon="eye"
             DivStyle={{

@@ -29,7 +29,7 @@ const CreateAccountName: React.FC = () => {
 
   useEffect(() => {
     lastname.length >= 1 ? setHasText(true) : setHasText(false)
-  }, [lastname, hasText])
+  }, [lastname])
 
   const handleCreateUser = useCallback(async () => {
     try {

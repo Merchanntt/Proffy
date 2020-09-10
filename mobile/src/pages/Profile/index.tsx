@@ -1,5 +1,5 @@
-import React, {useState, useCallback, useEffect} from 'react';
-import { KeyboardAvoidingView, Platform, View, Alert } from 'react-native';
+import React, {useState, useCallback, useEffect, useRef} from 'react';
+import { KeyboardAvoidingView, Platform, View, Alert, Animated, ScrollViewProps, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons'
 import * as Yup from 'yup'
 import * as ImagePicker from 'expo-image-picker'
@@ -21,11 +21,9 @@ import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
 import { 
     Container, 
     InfoContainer, 
-    ImageContainer, 
     Avatar,
     SendPhotoButton, 
     UserName,
-    MainForm, 
     Session,
     SessionTitleContainer,
     SessionTitle,
@@ -42,6 +40,8 @@ import {
 
 const Profile: React.FC = () => {
   const { user, updateUser } = UseAuth()
+  const scrollY = new Animated.Value(0)
+  const scrollView = useRef<ScrollView>(null)
 
   const [name, setName] = useState(user.name)
   const [lastname, setLastName] = useState(user.lastname)
@@ -171,6 +171,7 @@ const Profile: React.FC = () => {
       setLoading(false)
 
       Alert.alert('Seu Perfil foi atualizado!')
+      scrollView.current?.scrollTo({x: 0, y: 0, animated: true})
     } catch (error) {
       if(error instanceof Yup.ValidationError) {
         Alert.alert(error.message)
@@ -189,6 +190,18 @@ const Profile: React.FC = () => {
       scheduleItem,
   ])
 
+  const handleScroll = scrollY.interpolate({
+    inputRange: [0, 120],
+    outputRange: [180, 5],
+    extrapolate: 'clamp'
+  })
+
+  const handleOpacity = scrollY.interpolate({
+    inputRange: [0, 60],
+    outputRange: [1, 0],
+    extrapolate: 'clamp'
+  })
+
   return (
     <Container>
        <KeyboardAvoidingView 
@@ -199,18 +212,43 @@ const Profile: React.FC = () => {
       <Header 
         pageStatus='Meu perfil'
       >
+        <Animated.View style={{height: handleScroll}}>
         <InfoContainer source={BackgroundImage} resizeMode='center'>
-          <ImageContainer>
+          <Animated.View 
+            style={{
+              position: 'relative',
+              opacity: handleOpacity
+            }}>
             <Avatar source={user.avatar === null ? DefaultProfile : {uri: user.avatar}}/>
             <SendPhotoButton onPress={handleUpdatePhoto}>
               <Feather name='camera' size={20} color='#fff'/>
             </SendPhotoButton>
-          </ImageContainer>
-            <UserName>{user.name}{' '}{user.lastname}</UserName>
+          </Animated.View>
+          <Animated.View 
+            style={{
+              position: 'absolute',
+              top: -30,
+              transform: [{translateY: handleScroll}]
+            }}>
+              <UserName>{user.name}{' '}{user.lastname}</UserName>
+          </Animated.View>
         </InfoContainer>
+        </Animated.View>
       </Header>
-        <MainForm 
+
+        <Animated.ScrollView
+          style={{  
+            flex: 1,
+            marginTop: -40}}
           showsVerticalScrollIndicator={false}
+          scrollEventThrottle={16}
+          onScroll={Animated.event(
+            [
+              {nativeEvent: {contentOffset: {y: scrollY}}}
+            ],
+            {useNativeDriver: false}
+          )}
+          ref={scrollView}
           contentContainerStyle={{
             paddingHorizontal: 16,
             paddingBottom: 8
@@ -349,7 +387,7 @@ const Profile: React.FC = () => {
               />
           </Footer>
           </Session>
-        </MainForm>
+        </Animated.ScrollView>
       </KeyboardAvoidingView>
     </Container>  
   );

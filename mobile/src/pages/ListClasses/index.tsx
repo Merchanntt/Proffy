@@ -4,7 +4,6 @@ import { ScrollView, BorderlessButton, RectButton } from 'react-native-gesture-h
 import { Feather } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-community/async-storage'
 import * as Animatable from 'react-native-animatable'
-import DatePicker from '@react-native-community/datetimepicker'
 
 import Header from '../../components/Header'
 import ClassItem, { TeacherInfoData, day } from '../../components/ClassItem'
@@ -16,6 +15,7 @@ import api from '../../services/api'
 
 const ClassesListPage: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true)
+  const scrollY = new Animated.Value(0)
 
   const [subject, setSubject] = useState('')
   const [week_day, setWeekDay] = useState('')
@@ -71,6 +71,18 @@ const ClassesListPage: React.FC = () => {
     })
   }, [])
 
+  const handleButtonOpacity = scrollY.interpolate({
+    inputRange: [0, 50],
+    outputRange: [1, 0],
+    extrapolate: 'clamp',
+  })
+
+  const handleButtonHeight = scrollY.interpolate({
+    inputRange: [0, 50],
+    outputRange: [56, 0],
+    extrapolate: 'clamp',
+  })
+
  return (
    <View style={styles.container} >
      <Header 
@@ -79,7 +91,13 @@ const ClassesListPage: React.FC = () => {
       total={total}
       counterName= 'Proffys'
       headerRight={(
-        <View style={{position: 'relative'}}>
+        <Animated.View 
+          style={{
+            position: 'relative', 
+            opacity: handleButtonOpacity,
+            height: handleButtonHeight
+          }}>
+
         <BorderlessButton style={styles.filterButton} onPress={handleOpenSearchForm}>
           <View style={{flexDirection: "row", alignItems: "center"}}>
             <Feather name='filter' size={20} color='#04D361'/>
@@ -88,7 +106,7 @@ const ClassesListPage: React.FC = () => {
           </View>
           <Feather name={isVisible ? 'chevron-up' : 'chevron-down'} size={16} color='#A380F6'/>
         </BorderlessButton>
-      </View>
+      </Animated.View>
       )}
      >
       {isVisible && (
@@ -151,6 +169,13 @@ const ClassesListPage: React.FC = () => {
 
      <ScrollView 
       style={styles.itemlist}
+      scrollEventThrottle={16}
+      onScroll={Animated.event(
+        [
+          {nativeEvent: {contentOffset: {y: scrollY}}}
+        ],
+        {useNativeDriver: false}
+      )}
       contentContainerStyle={{
         paddingHorizontal: 16,
         paddingBottom: 8

@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { RectButton, BorderlessButton } from 'react-native-gesture-handler';
+import { BorderlessButton } from 'react-native-gesture-handler';
 
 
 export const Container = styled.View`
@@ -13,7 +13,7 @@ export const SubTitle = styled.Text`
   line-height: 24px;
   color: #D4C2FF;
   margin-top: -30px;
-  margin-bottom: 40px;
+  min-height: 80px;
 `;
 
 export const InfoContainer = styled.View`
@@ -38,11 +38,6 @@ export const  UserName = styled.Text`
   line-height: 25px;
   text-align: left;
   margin-left: 15px;
-`;
-
-export const MainForm = styled.ScrollView`
-  flex: 1;
-  margin-top: -40px;
 `;
 
 export const Session = styled.View`

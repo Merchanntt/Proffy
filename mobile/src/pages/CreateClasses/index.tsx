@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import { KeyboardAvoidingView, Platform, View, Alert } from 'react-native';
+import { KeyboardAvoidingView, Platform, View, Alert, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons'
 import * as Yup from 'yup'
@@ -23,7 +23,6 @@ import {
     InfoContainer, 
     Avatar,
     UserName,
-    MainForm, 
     Session,
     SessionTitleContainer,
     SessionTitle,
@@ -45,6 +44,7 @@ import {
 const CreateClasses: React.FC = () => {
   const { user } = UseAuth()
   const { navigate } = useNavigation()
+  const scrollY = new Animated.Value(0)
 
   const [whatsapp, setWhatsapp] = useState('')
   const [bio, setBio] = useState('')
@@ -120,6 +120,19 @@ const CreateClasses: React.FC = () => {
       navigate
   ])
 
+  const handleButtonOpacity = scrollY.interpolate({
+    inputRange: [0, 30],
+    outputRange: [1, 0],
+    extrapolate: 'clamp',
+  })
+
+  const handleButtonHeight = scrollY.interpolate({
+    inputRange: [0, 40],
+    outputRange: [60, 0],
+    extrapolate: 'clamp',
+  })
+
+
   return (
     <Container>
        <KeyboardAvoidingView 
@@ -131,9 +144,26 @@ const CreateClasses: React.FC = () => {
         pageStatus='Dar aulas'
         title="Que incrível que você quer dar aulas."
       >
-        <SubTitle>O primeiro passo, é preencher esse formulário de inscrição.</SubTitle>
+        <Animated.View 
+          style={{
+            position: 'relative', 
+            opacity: handleButtonOpacity,
+            height: handleButtonHeight,
+          }}>
+            <SubTitle>O primeiro passo, é preencher esse formulário de inscrição.</SubTitle>
+        </Animated.View>
       </Header>
-        <MainForm 
+        <Animated.ScrollView
+          style={{
+            flex: 1,
+            marginTop: -40,
+          }} 
+          onScroll={Animated.event(
+            [
+              {nativeEvent: {contentOffset: {y: scrollY}}}
+            ],
+            {useNativeDriver: false}
+          )}
           contentContainerStyle={{
             paddingHorizontal: 16,
             paddingBottom: 8
@@ -286,7 +316,7 @@ const CreateClasses: React.FC = () => {
             </WarningContainer>
           </Footer>
           </Session>
-        </MainForm>
+        </Animated.ScrollView>
       </KeyboardAvoidingView>
     </Container>  
   );

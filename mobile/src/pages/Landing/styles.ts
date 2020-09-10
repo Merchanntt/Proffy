@@ -20,9 +20,9 @@ import { StyleSheet } from 'react-native'
     marginBottom: 5
   },
 
-  userInfo: {
+  profileButton: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: 'center'
   },
 
   userName: {

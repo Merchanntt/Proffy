@@ -32,7 +32,7 @@ export default class UpdateUserProfilleController {
     user.email = email;
     user.whatsapp = whatsapp;
     user.bio = bio;
-    user.avatar = `http://192.168.1.101:3333/files/${user.avatar}`;
+    user.avatar = `http://192.168.1.102:3333/files/${user.avatar}`;
 
     delete user.password;
 
@@ -75,7 +75,7 @@ export default class UpdateUserProfilleController {
       }).where('id', '=', id);
 
       delete user.password;
-      user.avatar = `http://192.168.1.101:3333/files/${avatar}`;
+      user.avatar = `http://192.168.1.102:3333/files/${avatar}`;
 
       return response.status(201).json(user);
     } catch (err) {
