@@ -49,7 +49,6 @@ const AuthRoutes: React.FC = () => {
     <NavigationContainer>
       <Navigator screenOptions={{ headerShown: false}}>
         {firstLogOn && <Screen name='OnBoarding' component={OnBoarding} /> }
-
         <Screen name='LogIn' component={LogIn}/>
 
         <Screen name='CreateAccount-Name' component={CreateAccountName} />

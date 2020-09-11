@@ -7,7 +7,9 @@ import {Feather} from '@expo/vector-icons'
 interface InputPros extends TextInputProps  {
   label: string;
   icon?: string;
+  initialData?: string;
   DivStyle?: object;
+  textArea?: boolean;
 }
 
 import {Container, Input, Focus, TextLabel} from './styles';
@@ -17,7 +19,8 @@ const InputComponent: React.FC<InputPros> = ({
   label,
   secureTextEntry, 
   DivStyle,
-  value,
+  textArea,
+  initialData,
   ...rest}) => {
   const [passwordView, setPasswordView] = useState(true)
   const [isFocused, setIsFocused] = useState(false)
@@ -32,8 +35,8 @@ const InputComponent: React.FC<InputPros> = ({
   }, []);
 
   useEffect(() => {
-      value && value.length >= 1 ? setHasText(true) : setHasText(false)
-  }, [value]);
+    initialData && initialData.length >= 1 ? setHasText(true) : setHasText(false)
+  }, [initialData]);
 
   const handleShowPassword = useCallback(() => {
     setPasswordView(!passwordView)
@@ -43,12 +46,13 @@ const InputComponent: React.FC<InputPros> = ({
      <Container style={DivStyle} >
        <Focus isFocused={isFocused}/>
 
-        <TextLabel isFocused={isFocused} hasText={hasText}>
+        <TextLabel isFocused={isFocused} hasText={hasText} textArea={textArea}>
           {label}
         </TextLabel>
         
       <Input 
         secureTextEntry={icon ? passwordView : false } 
+        value={initialData}
         onFocus={handleFocused}
         onBlur={handleBlur}
         {...rest}/>

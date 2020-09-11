@@ -46,8 +46,8 @@ const CreateClasses: React.FC = () => {
   const { navigate } = useNavigation()
   const scrollY = new Animated.Value(0)
 
-  const [whatsapp, setWhatsapp] = useState('')
-  const [bio, setBio] = useState('')
+  const [whatsapp, setWhatsapp] = useState(user.whatsapp)
+  const [bio, setBio] = useState(user.bio)
 
   const [subject, setSubject] = useState('')
   const [cost, setCost] = useState('')
@@ -183,7 +183,7 @@ const CreateClasses: React.FC = () => {
               </InfoContainer>
               <Input 
                 label='WhatsApp'
-                value={whatsapp}
+                initialData={whatsapp}
                 keyboardType='phone-pad'
                 onChangeText={(e) => setWhatsapp(e)}
                 DivStyle={{
@@ -193,11 +193,16 @@ const CreateClasses: React.FC = () => {
 
               <Input 
                 label='Bio'
-                value={bio}
+                initialData={bio}
+                maxLength={300}
+                numberOfLines={4}
+                multiline={true}
+                textArea= {true}
                 onChangeText={(e) => setBio(e)}
                 DivStyle={{
                   marginTop: 20,
-                  height: 100,
+                  height: 180,
+                  padding: 10,
                 }}
               />
 
@@ -225,7 +230,7 @@ const CreateClasses: React.FC = () => {
 
               <Input 
                 label='Custo da sua hora aula'
-                value={cost}
+                initialData={cost}
                 keyboardType='decimal-pad'
                 returnKeyType='default'
                 onChangeText={(e) => setCost(e)}

@@ -105,7 +105,7 @@ const LogIn: React.FC = () => {
             keyboardType='email-address' 
             autoCapitalize='none'
             onChangeText={(e) => setEmail(e)}
-            value={email}
+            initialData={email}
             autoCorrect={false}
             DivStyle={{
               borderTopLeftRadius: 8,
@@ -118,7 +118,7 @@ const LogIn: React.FC = () => {
             label='Senha' 
             autoCapitalize="none"
             onChangeText={(e) => handleHasText(e)}
-            value={password}
+            initialData={password}
             icon="eye"
             DivStyle={{
               borderTopLeftRadius: 0,

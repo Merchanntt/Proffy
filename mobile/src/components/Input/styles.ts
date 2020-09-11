@@ -7,6 +7,7 @@ interface FocusInputProps {
 interface FocusLabelProps {
   isFocused: boolean
   hasText: boolean
+  textArea?: boolean
 }
 
 export const Container = styled.View`
@@ -42,6 +43,11 @@ export const TextLabel = styled.Text<FocusLabelProps>`
 
   ${({hasText}) => hasText && css`
     transform: scale(0.7) translateY(-16px) translateX(-7px);
+  `}
+
+  ${({textArea}) => textArea && css`
+    top: 5px;
+    left: 4px;
   `}
 `
 

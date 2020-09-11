@@ -90,7 +90,7 @@ const CreateAccountName: React.FC = () => {
         <Input 
           label='Nome'
           onChangeText={(e) => setName(e)}
-          value={name}
+          initialData={name}
           DivStyle={{
             borderTopLeftRadius: 8,
             borderTopRightRadius: 8,
@@ -101,7 +101,7 @@ const CreateAccountName: React.FC = () => {
         <Input 
           label='Sobrenome'
           onChangeText={(e) => setLastName(e)}
-          value={lastname}
+          initialData={lastname}
           DivStyle={{
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0,

@@ -263,7 +263,7 @@ const Profile: React.FC = () => {
             </SessionTitleContainer>
               <Input 
               label='Nome'
-              value={name}
+              initialData={name}
               onChangeText={(e) => setName(e)}
               DivStyle={{
                 marginTop: 20,
@@ -272,7 +272,7 @@ const Profile: React.FC = () => {
 
               <Input 
                 label='Sobrenome'
-                value={lastname}
+                initialData={lastname}
                 onChangeText={(e) => setLastName(e)}
                 DivStyle={{
                   marginTop: 20,
@@ -283,7 +283,7 @@ const Profile: React.FC = () => {
                 label='E-mail' 
                 autoCapitalize='none'
                 onChangeText={(e) => setEmail(e)}
-                value={email}
+                initialData={email}
                 autoCorrect={false}
                 keyboardType='email-address' 
                 DivStyle={{
@@ -293,7 +293,7 @@ const Profile: React.FC = () => {
 
               <Input 
                 label='WhatsApp'
-                value={whatsapp}
+                initialData={whatsapp}
                 keyboardType='phone-pad'
                 maxLength={11}
                 onChangeText={(e) => setWhatsapp(e)}
@@ -304,11 +304,16 @@ const Profile: React.FC = () => {
 
               <Input 
                 label='Bio'
-                value={bio}
+                initialData={bio}
+                maxLength={300}
+                numberOfLines={4}
+                multiline={true}
+                textArea= {true}
                 onChangeText={(e) => setBio(e)}
                 DivStyle={{
                   marginTop: 20,
-                  height: 100,
+                  height: 180,
+                  padding: 10,
                 }}
               />
 

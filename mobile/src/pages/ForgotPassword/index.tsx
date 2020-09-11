@@ -32,7 +32,7 @@ const LogIn: React.FC = () => {
     } else {
       setHasText(false)
     }
-  }, [email, hasText])
+  }, [email])
 
   const handleSendMail = useCallback(async () => {
     try {
@@ -94,7 +94,7 @@ const LogIn: React.FC = () => {
           autoCorrect={false}
           autoCapitalize='none'
           label='E-mail' 
-          value={email}
+          initialData={email}
           keyboardType='email-address' 
           onChangeText={(e) => setEmail(e) }
         />

@@ -40,7 +40,7 @@ const CreateAccountCredentials: React.FC = () => {
 
   useEffect(() => {
     password.length >= 6 ? setHasText(true) : setHasText(false)
-  }, [password, hasText])
+  }, [password])
 
   const handleCreateUser = useCallback(async () => {
     try {
@@ -115,7 +115,7 @@ const CreateAccountCredentials: React.FC = () => {
             label='E-mail' 
             autoCapitalize='none'
             onChangeText={(e) => setEmail(e)}
-            value={email}
+            initialData={email}
             autoCorrect={false}
             keyboardType='email-address' 
             DivStyle={{
@@ -130,7 +130,7 @@ const CreateAccountCredentials: React.FC = () => {
             autoCapitalize="none" 
             icon="eye"
             onChangeText={(e) => setPassword(e)}
-            value={password}
+            initialData={password}
             DivStyle={{
               borderTopLeftRadius: 0,
               borderTopRightRadius: 0,
