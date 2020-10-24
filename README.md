@@ -1,17 +1,22 @@
+<div align="center">
+
 # Proffy
 ![node-current](https://img.shields.io/node/v/package)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Merchanntt/Proffy)
 
-![]()
-
 
 Builded in React, node and Typescript, this application was designed to connect professors and students.
+
+</div>
 
 ## Features
 
 Create you profile and search for classes in a specific hour. If you are a professor, also is possible to create, update and delete you classes.
 
 ## Mobile
+
+<div align="center">
+  
 #OnBoarding with info about how use the app. LogIn, create account and send reset password email.
 ![](https://media.giphy.com/media/Vdieba0p0SMBSlofi3/giphy.gif)
 
@@ -23,6 +28,8 @@ Set as Favorite and create classes.  <br />
 
 Profile Update.  <br />
 ![](https://media.giphy.com/media/J4bOvtwplmfSQpUHAH/giphy.gif)
+
+</div>
 
 ## Getting Started
 To use this app, you'll need...
