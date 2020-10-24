@@ -19,13 +19,10 @@ Create you profile and search for classes in a specific hour. If you are a profe
   
 #OnBoarding with info about how use the app. LogIn, create account and send reset password email.
 ![](https://media.giphy.com/media/Vdieba0p0SMBSlofi3/giphy.gif)
-
 Searching Classes. <br />
 ![](https://media.giphy.com/media/UT5LzQHBrTLHc3cUsq/giphy.gif)
-
 Set as Favorite and create classes.  <br />
 ![](https://media.giphy.com/media/Q5cuVtFtH0kleHf1yH/giphy.gif)
-
 Profile Update.  <br />
 ![](https://media.giphy.com/media/J4bOvtwplmfSQpUHAH/giphy.gif)
 
