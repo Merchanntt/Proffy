@@ -4,7 +4,7 @@
 [Mobile](#Mobile) |
 [Web](#Web) |
 [Server](#Server) |
-[Getting Started](#GettingStarted)
+[Getting Started](#Getting_Started)
 
 # Proffy
 
@@ -38,7 +38,7 @@ Profile Update.  <br />
 ![](https://media.giphy.com/media/J4bOvtwplmfSQpUHAH/giphy.gif)
 
 
-## Getting Started
+## Getting_Started
 To use this app, you'll need...
 
 - Clone this repository: 
