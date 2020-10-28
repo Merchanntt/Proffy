@@ -7,6 +7,9 @@
 [Getting Started](#GettingStarted)
 
 # Proffy
+
+<img src='./web/src/assets/images/landing.svg'/>
+
 ![node-current](https://img.shields.io/node/v/package)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Merchanntt/Proffy)
 
