@@ -1,6 +1,6 @@
 <div align="center">
 
-*[Features](##Features)
+[Features](#Features)
 
 # Proffy
 ![node-current](https://img.shields.io/node/v/package)
