@@ -3,7 +3,6 @@
 [Features](#Features) |
 [Mobile](#Mobile) |
 [Web](#Web) |
-[Server](#Server) |
 [Getting Started](#Getting_Started)
 
 # Proffy
@@ -36,6 +35,12 @@ Create you profile and search for classes in a specific hour. If you are a profe
 
 ### Profile Update.  <br />
 ![](https://media.giphy.com/media/J4bOvtwplmfSQpUHAH/giphy.gif)
+
+
+## Web
+
+![](https://media.giphy.com/media/dwd8tDoDm9OX5b2xtS/giphy.gif)
+![](https://media.giphy.com/media/5ZhxrPk8tEYMstxULI/giphy.gif)
 
 
 ## Getting_Started
