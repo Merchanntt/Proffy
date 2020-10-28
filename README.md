@@ -1,5 +1,7 @@
 <div align="center">
 
+*[Features](##Features)
+
 # Proffy
 ![node-current](https://img.shields.io/node/v/package)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Merchanntt/Proffy)
