@@ -4,7 +4,7 @@
 [Mobile](#Mobile) |
 [Web](#Web) |
 [Server](#Server) |
-[Getting Started](#GettingStarted) |
+[Getting Started](#GettingStarted)
 
 # Proffy
 ![node-current](https://img.shields.io/node/v/package)
